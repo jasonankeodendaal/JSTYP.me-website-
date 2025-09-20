@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSTYP.me - AI App Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        :root {
+            --glow-color: #f97316; /* orange-500 */
+            --background-color: #000000;
+            --text-color: #ffffff;
+            --card-color: #111827;
+            --border-color: #374151;
+            --font-family: 'Inter', sans-serif;
+        }
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+        }
+        .glow-effect {
+            box-shadow: 0 0 5px var(--glow-color), 0 0 10px var(--glow-color), 0 0 15px var(--glow-color);
+        }
+        .text-glow {
+            text-shadow: 0 0 8px var(--glow-color);
+        }
+
+        /* NEW ANIMATIONS */
+        @keyframes scroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        .animate-scroll {
+          animation: scroll 30s linear infinite;
+        }
+
+        @keyframes scroll-reverse {
+          from { transform: translateX(-50%); }
+          to { transform: translateX(0); }
+        }
+        .animate-scroll-reverse {
+          animation: scroll-reverse 45s linear infinite;
+        }
+
+        @keyframes futuristic-glow {
+          0%, 100% {
+            text-shadow:
+              0 0 2px #fff,
+              0 0 5px #fff,
+              0 0 10px var(--glow-color);
+          }
+          50% {
+            text-shadow:
+              0 0 5px #fff,
+              0 0 10px #fff,
+              0 0 15px var(--glow-color);
+          }
+        }
+        .animate-futuristic-glow {
+          animation: futuristic-glow 4s ease-in-out infinite;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.1"
+  }
+}
+</script>
+</head>
+<body class="font-sans">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
