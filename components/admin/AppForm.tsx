@@ -11,15 +11,15 @@ interface AppFormProps {
     updateApp: (app: AppShowcaseItem) => Promise<void>;
 }
 
-// FIX: Define a type for the form state to correctly handle `features` and `abilities` as strings for the textareas, while the main type `AppShowcaseItem` expects string arrays.
-interface AppFormState extends Omit<Partial<AppShowcaseItem>, 'features' | 'abilities'> {
+// Define a type for the form state to correctly handle `features` and `abilities` as strings for the textareas,
+// while the main type `AppShowcaseItem` expects string arrays. This resolves type conflicts.
+interface AppFormState extends Omit<Partial<AppShowcaseItem>, 'features' | 'abilities' | 'ratings'> {
     features?: string;
     abilities?: string;
 }
 
 const AppForm: React.FC<AppFormProps> = ({ editingApp, onCancelEdit, addApp, updateApp }) => {
     // Form State
-    // FIX: Use the new AppFormState type for the form data state.
     const [formData, setFormData] = useState<AppFormState>({});
     
     // AI Interaction State
@@ -33,7 +33,6 @@ const AppForm: React.FC<AppFormProps> = ({ editingApp, onCancelEdit, addApp, upd
         if (editingApp) {
             setFormData({
                 ...editingApp,
-                // FIX: These assignments are now type-correct because AppFormState defines `features` and `abilities` as optional strings.
                 features: editingApp.features.join('\n'),
                 abilities: editingApp.abilities.join('\n'),
             });
@@ -48,7 +47,6 @@ const AppForm: React.FC<AppFormProps> = ({ editingApp, onCancelEdit, addApp, upd
         onCancelEdit();
     };
     
-    // FIX: Update the `field` parameter to be a key of `AppFormState` for type safety.
     const handleInputChange = (field: keyof AppFormState, value: string | string[]) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
@@ -58,7 +56,6 @@ const AppForm: React.FC<AppFormProps> = ({ editingApp, onCancelEdit, addApp, upd
         setIsGeneratingListing(true);
         try {
             const generatedData = await generateAppListing(appIdea);
-            // FIX: This state update is now type-correct because the returned object matches AppFormState.
             setFormData(prev => ({
                 ...prev,
                 ...generatedData,
@@ -132,29 +129,28 @@ const AppForm: React.FC<AppFormProps> = ({ editingApp, onCancelEdit, addApp, upd
         }
         setIsSubmitting(true);
         
-        const appData = {
-          ...formData,
-          // FIX: `formData.features` is now correctly typed as `string | undefined`, so `typeof` check and `.split()` are valid, resolving the 'never' type error.
-          features: typeof formData.features === 'string' ? formData.features.split('\n').filter(f => f.trim() !== '') : [],
-          abilities: typeof formData.abilities === 'string' ? formData.abilities.split('\n').filter(a => a.trim() !== '') : [],
-        };
-        
-        // Ensure all required fields for AppShowcaseItem are present
-        // The original code had a duplicate 'pinCode' property.
-        // This is corrected by destructuring pinCode out of appData before spreading the rest.
-        const { pinCode, ...restOfAppData } = appData;
-        
-        // FIX: Removed duplicate 'pinCode' property from the object literal.
-        const finalData = {
-            name: '', description: '', longDescription: '', price: '', imageUrl: '', heroImageUrl: '',
-            screenshots: [], features: [], abilities: [], whyItWorks: '', dedicatedPurpose: '',
-            termsAndConditions: '', apkUrl: '', iosUrl: '', pwaUrl: '',
-            ...restOfAppData,
-            pinCode: (pinCode || '').trim(),
+        // Convert form state back to the AppShowcaseItem structure
+        const finalData: Omit<AppShowcaseItem, 'id' | 'ratings'> = {
+            name: formData.name || '',
+            description: formData.description || '',
+            imageUrl: formData.imageUrl || '',
+            heroImageUrl: formData.heroImageUrl || '',
+            longDescription: formData.longDescription || '',
+            price: formData.price || '',
+            screenshots: formData.screenshots || [],
+            features: typeof formData.features === 'string' ? formData.features.split('\n').filter(f => f.trim() !== '') : [],
+            abilities: typeof formData.abilities === 'string' ? formData.abilities.split('\n').filter(a => a.trim() !== '') : [],
+            whyItWorks: formData.whyItWorks || '',
+            dedicatedPurpose: formData.dedicatedPurpose || '',
+            termsAndConditions: formData.termsAndConditions || '',
+            pinCode: formData.pinCode || '',
+            apkUrl: formData.apkUrl || '',
+            iosUrl: formData.iosUrl || '',
+            pwaUrl: formData.pwaUrl || '',
         };
 
         if (editingApp) {
-            await updateApp({ ...editingApp, ...finalData });
+            await updateApp({ ...finalData, id: editingApp.id, ratings: editingApp.ratings });
             alert('App updated successfully!');
         } else {
             await addApp(finalData);
