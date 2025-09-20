@@ -78,9 +78,12 @@
   }
 }
 </script>
+<!-- Add Babel to transpile JSX and TSX in the browser -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body class="font-sans">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <!-- Change script type to text/babel for Babel to process it -->
+    <script type="text/babel" data-type="module" src="/index.tsx"></script>
 </body>
 </html>
