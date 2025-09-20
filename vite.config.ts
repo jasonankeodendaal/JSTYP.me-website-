@@ -1,17 +1,12 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-  // Load env file based on `mode` in the current working directory.
-  // Vercel will set process.env variables during the build process.
-  const env = loadEnv(mode, process.cwd(), '');
-
-  return {
-    plugins: [react()],
-    define: {
-      // Expose Vercel's environment variables to the client code
-      'process.env.API_KEY': JSON.stringify(env.API_KEY),
-    }
-  }
+export default defineConfig({
+  plugins: [react()],
+  // The 'vercel dev' command now handles API proxying automatically,
+  // making the manual server.proxy configuration redundant.
+  // 
+  // API key is no longer exposed to the client.
+  // It will be used securely on the server-side API routes.
 })

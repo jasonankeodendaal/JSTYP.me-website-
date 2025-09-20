@@ -94,7 +94,7 @@ const AppShowcase: React.FC = () => {
                 ) : !apps || apps.length === 0 ? (
                     <div className="text-center py-20">
                         <h3 
-                            className="text-white text-6xl font-black uppercase tracking-widest animate-pulse"
+                            className="text-white text-6xl font-black uppercase tracking-widest animate-pulse font-mono"
                             style={{ textShadow: '0 0 5px #ef4444, 0 0 10px #ef4444, 0 0 20px #ef4444' }}
                         >
                             Coming Soon!!!
