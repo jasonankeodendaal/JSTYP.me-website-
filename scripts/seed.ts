@@ -1,4 +1,4 @@
-import { db, sql } from '@vercel/postgres';
+import { db } from '@vercel/postgres';
 import type { AppShowcaseItem, WebsiteDetails, TeamMember, Client } from '../types';
 
 // Mock data copied from the original api.ts

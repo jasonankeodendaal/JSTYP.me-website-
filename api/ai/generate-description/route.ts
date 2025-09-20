@@ -1,5 +1,4 @@
 import { GoogleGenAI } from "@google/genai";
-import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
@@ -17,10 +16,10 @@ export async function POST(request: Request) {
     });
 
     const description = response.text ?? "Failed to generate description.";
-    return NextResponse.json({ description });
+    return new Response(JSON.stringify({ description }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
   } catch (error) {
     console.error("Error in AI description generation:", error);
-    return NextResponse.json({ message: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ message: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

@@ -1,5 +1,4 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
@@ -45,10 +44,10 @@ export async function POST(request: Request) {
     });
 
     const content = JSON.parse(response.text || '{}');
-    return NextResponse.json(content);
+    return new Response(JSON.stringify(content), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
   } catch (error) {
     console.error("Error in AI about page generation:", error);
-    return NextResponse.json({ message: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ message: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

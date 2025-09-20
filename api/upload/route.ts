@@ -1,13 +1,12 @@
 import { put } from '@vercel/blob';
-import { NextResponse } from 'next/server';
 import { Buffer } from 'buffer';
 
-export async function POST(request: Request): Promise<NextResponse> {
+export async function POST(request: Request): Promise<Response> {
   try {
     const { file } = (await request.json()) as { file: string };
 
     if (!file) {
-      return NextResponse.json({ message: 'No file to upload.' }, { status: 400 });
+      return new Response(JSON.stringify({ message: 'No file to upload.' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
     // Extract mime type and base64 data
@@ -22,8 +21,8 @@ export async function POST(request: Request): Promise<NextResponse> {
       contentType: mimeType,
     });
 
-    return NextResponse.json(blob);
+    return new Response(JSON.stringify(blob), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

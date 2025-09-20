@@ -1,5 +1,4 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
 import type { PinRecord } from '../../../types';
 
 export const dynamic = 'force-dynamic';
@@ -11,15 +10,15 @@ export async function POST(request: Request) {
 
     const { rows } = await sql<PinRecord>`SELECT * FROM pin_records WHERE pin = ${pin};`;
     if (rows.length === 0) {
-        return NextResponse.json({ message: "Invalid PIN code. Please try again." }, { status: 404 });
+        return new Response(JSON.stringify({ message: "Invalid PIN code. Please try again." }), { status: 404, headers: { 'Content-Type': 'application/json' } });
     }
 
     const recordToUpdate = rows[0];
-    if (recordToUpdate.appid !== appId) {
-        return NextResponse.json({ message: "This PIN is not valid for this app." }, { status: 400 });
+    if (recordToUpdate.appId !== appId) {
+        return new Response(JSON.stringify({ message: "This PIN is not valid for this app." }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
-    if (recordToUpdate.isredeemed) {
-        return NextResponse.json({ message: "This PIN has already been used." }, { status: 400 });
+    if (recordToUpdate.isRedeemed) {
+        return new Response(JSON.stringify({ message: "This PIN has already been used." }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
     const redeemedAt = new Date().toISOString();
@@ -37,8 +36,8 @@ export async function POST(request: Request) {
         RETURNING *;
     `;
     
-    return NextResponse.json(result.rows[0]);
+    return new Response(JSON.stringify(result.rows[0]), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

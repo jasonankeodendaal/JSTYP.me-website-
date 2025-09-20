@@ -1,5 +1,4 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,11 +9,11 @@ export async function POST(request: Request) {
     const result = await sql`SELECT * FROM clients WHERE lower(email) = lower(${email});`;
     
     if (result.rowCount === 0) {
-      return NextResponse.json(null, { status: 200 });
+      return new Response(JSON.stringify(null), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
-    return NextResponse.json(result.rows[0]);
+    return new Response(JSON.stringify(result.rows[0]), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

@@ -1,5 +1,4 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
 import type { TeamMember } from '../../../types';
 
 export const dynamic = 'force-dynamic';
@@ -23,19 +22,19 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       WHERE id = ${id};
     `;
 
-    return NextResponse.json(member);
+    return new Response(JSON.stringify(member), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
 
 // DELETE a team member
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: Request, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
     await sql`DELETE FROM team_members WHERE id = ${id};`;
-    return NextResponse.json({ message: 'Team member deleted successfully' }, { status: 200 });
+    return new Response(JSON.stringify({ message: 'Team member deleted successfully' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

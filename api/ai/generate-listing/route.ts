@@ -1,5 +1,4 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
@@ -38,10 +37,10 @@ Features and abilities should be concise bullet points.`;
     });
 
     const listing = JSON.parse(response.text || '{}');
-    return NextResponse.json(listing);
+    return new Response(JSON.stringify(listing), { status: 200, headers: { 'Content-Type': 'application/json' } });
     
   } catch (error) {
     console.error("Error in AI listing generation:", error);
-    return NextResponse.json({ message: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ message: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

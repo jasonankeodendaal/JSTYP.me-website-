@@ -1,5 +1,4 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { NextResponse } from 'next/server';
 import type { AppShowcaseItem } from '../../../types';
 
 export async function POST(request: Request) {
@@ -41,13 +40,13 @@ Only recommend an app if it's a strong, direct solution to the user's problem. I
 
     const jsonResponse = JSON.parse(response.text || '{}');
     if (jsonResponse.bestMatchAppId === 'null' || !jsonResponse.bestMatchAppId) {
-        return NextResponse.json({ bestMatchAppId: null, reasoning: jsonResponse.reasoning || "No suitable app found." });
+        return new Response(JSON.stringify({ bestMatchAppId: null, reasoning: jsonResponse.reasoning || "No suitable app found." }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
-    return NextResponse.json({ bestMatchAppId: jsonResponse.bestMatchAppId, reasoning: jsonResponse.reasoning });
+    return new Response(JSON.stringify({ bestMatchAppId: jsonResponse.bestMatchAppId, reasoning: jsonResponse.reasoning }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
   } catch (error) {
     console.error("Error in AI find matching app:", error);
-    return NextResponse.json({ message: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ message: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

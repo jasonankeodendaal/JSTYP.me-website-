@@ -1,5 +1,4 @@
 import { GoogleGenAI } from "@google/genai";
-import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
@@ -25,10 +24,10 @@ export async function POST(request: Request) {
     }
     
     const imageUrl = `data:image/png;base64,${base64ImageBytes}`;
-    return NextResponse.json({ imageUrl });
+    return new Response(JSON.stringify({ imageUrl }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
   } catch (error) {
     console.error("Error in AI image generation:", error);
-    return NextResponse.json({ message: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ message: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

@@ -1,6 +1,5 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
-import type { AppShowcaseItem } from '../../../types';
+import type { AppShowcaseItem } from '../../types';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,9 +7,9 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const { rows } = await sql`SELECT * FROM apps;`;
-    return NextResponse.json(rows);
+    return new Response(JSON.stringify(rows), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
 
@@ -36,8 +35,8 @@ export async function POST(request: Request) {
       );
     `;
     
-    return NextResponse.json(newApp, { status: 201 });
+    return new Response(JSON.stringify(newApp), { status: 201, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

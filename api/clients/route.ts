@@ -1,5 +1,4 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
 import type { Client } from '../../types';
 
 export const dynamic = 'force-dynamic';
@@ -8,9 +7,9 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const { rows } = await sql`SELECT id, name, email FROM clients;`; // Exclude password
-    return NextResponse.json(rows);
+    return new Response(JSON.stringify(rows), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
 
@@ -32,12 +31,12 @@ export async function POST(request: Request) {
     
     // Return the new client without the password
     const { password: _, ...clientToReturn } = newClient;
-    return NextResponse.json(clientToReturn, { status: 201 });
+    return new Response(JSON.stringify(clientToReturn), { status: 201, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
     // Handle unique constraint violation for email
     if ((error as any).code === '23505') {
-        return NextResponse.json({ message: 'An account with this email already exists.' }, { status: 409 });
+        return new Response(JSON.stringify({ message: 'An account with this email already exists.' }), { status: 409, headers: { 'Content-Type': 'application/json' } });
     }
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

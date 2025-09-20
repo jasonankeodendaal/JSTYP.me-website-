@@ -1,20 +1,19 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
 import type { AppShowcaseItem } from '../../../types';
 
 export const dynamic = 'force-dynamic';
 
 // GET a single app by ID
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
     const result = await sql`SELECT * FROM apps WHERE id = ${id};`;
     if (result.rowCount === 0) {
-      return NextResponse.json({ message: 'App not found' }, { status: 404 });
+      return new Response(JSON.stringify({ message: 'App not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
     }
-    return NextResponse.json(result.rows[0]);
+    return new Response(JSON.stringify(result.rows[0]), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
 
@@ -46,19 +45,19 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       WHERE id = ${id};
     `;
 
-    return NextResponse.json(app);
+    return new Response(JSON.stringify(app), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
 
 // DELETE an app by ID
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: Request, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
     await sql`DELETE FROM apps WHERE id = ${id};`;
-    return NextResponse.json({ message: 'App deleted successfully' }, { status: 200 });
+    return new Response(JSON.stringify({ message: 'App deleted successfully' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

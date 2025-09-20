@@ -1,5 +1,4 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
 import type { AppRequest } from '../../types';
 
 export const dynamic = 'force-dynamic';
@@ -8,9 +7,9 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const { rows } = await sql`SELECT * FROM app_requests ORDER BY submittedAt DESC;`;
-    return NextResponse.json(rows);
+    return new Response(JSON.stringify(rows), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
 
@@ -30,8 +29,8 @@ export async function POST(request: Request) {
       VALUES (${newRequest.id}, ${newRequest.problemDescription}, ${newRequest.status}, ${newRequest.submittedAt});
     `;
     
-    return NextResponse.json(newRequest, { status: 201 });
+    return new Response(JSON.stringify(newRequest), { status: 201, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

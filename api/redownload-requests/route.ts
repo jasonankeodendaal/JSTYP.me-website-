@@ -1,5 +1,4 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
 import type { RedownloadRequest } from '../../types';
 
 export const dynamic = 'force-dynamic';
@@ -8,9 +7,9 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const { rows } = await sql`SELECT * FROM redownload_requests ORDER BY requestedAt DESC;`;
-    return NextResponse.json(rows);
+    return new Response(JSON.stringify(rows), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
 
@@ -27,7 +26,7 @@ export async function POST(request: Request) {
     `;
 
     if (rows.length > 0) {
-        return NextResponse.json(null, { status: 200 }); // Indicates an existing pending request
+        return new Response(JSON.stringify(null), { status: 200, headers: { 'Content-Type': 'application/json' } }); // Indicates an existing pending request
     }
 
     const newRequest: RedownloadRequest = {
@@ -45,8 +44,8 @@ export async function POST(request: Request) {
       );
     `;
     
-    return NextResponse.json(newRequest, { status: 201 });
+    return new Response(JSON.stringify(newRequest), { status: 201, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

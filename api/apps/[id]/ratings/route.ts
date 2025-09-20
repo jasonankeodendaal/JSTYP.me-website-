@@ -1,5 +1,4 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
 import type { AppShowcaseItem } from '../../../../types';
 
 export const dynamic = 'force-dynamic';
@@ -11,12 +10,12 @@ export async function POST(request: Request, { params }: { params: { id: string 
     const { clientId, rating } = await request.json();
 
     if (!clientId || !rating) {
-        return NextResponse.json({ message: 'Client ID and rating are required' }, { status: 400 });
+        return new Response(JSON.stringify({ message: 'Client ID and rating are required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
     const { rows } = await sql<AppShowcaseItem>`SELECT * FROM apps WHERE id = ${appId};`;
     if (rows.length === 0) {
-      return NextResponse.json({ message: 'App not found' }, { status: 404 });
+      return new Response(JSON.stringify({ message: 'App not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
     }
 
     const app = rows[0];
@@ -34,8 +33,8 @@ export async function POST(request: Request, { params }: { params: { id: string 
     
     const updatedAppResult = await sql<AppShowcaseItem>`SELECT * FROM apps WHERE id = ${appId};`;
 
-    return NextResponse.json(updatedAppResult.rows[0]);
+    return new Response(JSON.stringify(updatedAppResult.rows[0]), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

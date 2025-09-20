@@ -1,5 +1,4 @@
 import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,7 +9,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const { status } = await request.json();
 
     if (status !== 'thinking' && status !== 'done') {
-        return NextResponse.json({ message: 'Invalid status' }, { status: 400 });
+        return new Response(JSON.stringify({ message: 'Invalid status' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
     const result = await sql`
@@ -21,11 +20,11 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     `;
     
     if (result.rowCount === 0) {
-        return NextResponse.json({ message: 'Request not found' }, { status: 404 });
+        return new Response(JSON.stringify({ message: 'Request not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
     }
     
-    return NextResponse.json(result.rows[0]);
+    return new Response(JSON.stringify(result.rows[0]), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
