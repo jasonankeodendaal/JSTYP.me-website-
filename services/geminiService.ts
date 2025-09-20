@@ -4,11 +4,14 @@ import type { AppShowcaseItem, AboutPageContent } from '../types';
 // Helper function to lazily initialize the AI client.
 // This prevents the app from crashing on start if the API key is missing.
 const getAiClient = () => {
-  if (!process.env.API_KEY) {
+  // Safely check for process and env to prevent crash in browser environments.
+  const apiKey = typeof process !== 'undefined' && process.env ? process.env.API_KEY : undefined;
+
+  if (!apiKey) {
     // This error will be caught by the calling functions.
     throw new Error("API Key not configured. Please set the API_KEY environment variable.");
   }
-  return new GoogleGenAI({ apiKey: process.env.API_KEY });
+  return new GoogleGenAI({ apiKey });
 };
 
 export const generateAppDescription = async (keywords: string): Promise<string> => {
