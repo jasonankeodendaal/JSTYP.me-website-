@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
 import Header from './Header';
 import LoadingSpinner from './LoadingSpinner';
 import type { AboutPageSection } from '../types';
-import { Link } from 'react-router-dom';
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { Link } from "react-router-dom";
 import { ArrowLeftIcon } from './IconComponents';
 
 const AboutPage: React.FC = () => {

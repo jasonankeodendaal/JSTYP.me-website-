@@ -2,9 +2,8 @@ import { GoogleGenAI, Type } from "@google/genai";
 import type { AppShowcaseItem, AboutPageContent } from '../types';
 
 // Helper function to lazily initialize the AI client.
-// This prevents the app from crashing on start if the API key is missing.
 const getAiClient = () => {
-  // FIX: Use process.env.API_KEY as per the guidelines to resolve the TypeScript error.
+  // Vite injects the API_KEY from the build environment into process.env.
   const apiKey = process.env.API_KEY;
 
   if (!apiKey) {
@@ -24,7 +23,7 @@ export const generateAppDescription = async (keywords: string): Promise<string> 
       contents: prompt,
     });
     
-    return response.text;
+    return response.text ?? "Failed to generate AI description. Please try again or write one manually.";
   } catch (error) {
     console.error("Error generating description with Gemini API:", error);
     return error instanceof Error ? error.message : "Failed to generate AI description. Please try again or write one manually.";
@@ -62,7 +61,7 @@ Features and abilities should be concise bullet points.`;
       }
     });
 
-    return JSON.parse(response.text) as Partial<AppShowcaseItem>;
+    return JSON.parse(response.text || '{}') as Partial<AppShowcaseItem>;
 
   } catch (error) {
     console.error("Error generating app listing with Gemini API:", error);
@@ -83,7 +82,10 @@ export const generateAppImage = async (prompt: string, aspectRatio: '1:1' | '16:
         },
     });
 
-    const base64ImageBytes: string = response.generatedImages[0].image.imageBytes;
+    const base64ImageBytes: string | undefined = response.generatedImages?.[0]?.image?.imageBytes;
+    if (!base64ImageBytes) {
+      throw new Error("AI failed to generate an image from the provided prompt.");
+    }
     return `data:image/png;base64,${base64ImageBytes}`;
   } catch (error) {
     console.error("Error generating image with Gemini API:", error);
@@ -124,9 +126,9 @@ Only recommend an app if it's a strong, direct solution to the user's problem. I
       }
     });
     
-    const jsonResponse = JSON.parse(response.text);
-    if (jsonResponse.bestMatchAppId === 'null') {
-        return { bestMatchAppId: null, reasoning: jsonResponse.reasoning };
+    const jsonResponse = JSON.parse(response.text || '{}');
+    if (jsonResponse.bestMatchAppId === 'null' || !jsonResponse.bestMatchAppId) {
+        return { bestMatchAppId: null, reasoning: jsonResponse.reasoning || "No suitable app found." };
     }
 
     return { bestMatchAppId: jsonResponse.bestMatchAppId, reasoning: jsonResponse.reasoning };
@@ -176,7 +178,7 @@ export const generateAboutPageContent = async (rawText: string): Promise<AboutPa
           }
         });
 
-        return JSON.parse(response.text) as AboutPageContent;
+        return JSON.parse(response.text || '{}') as AboutPageContent;
 
       } catch (error) {
         console.error("Error generating About Page content with Gemini API:", error);

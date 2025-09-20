@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { useNavigate } from "react-router-dom";
 import { useApps } from '../hooks/useApps';
 import { useAppRequests } from '../hooks/useAppRequests';
 import { useWebsiteDetails } from '../hooks/useWebsiteDetails';

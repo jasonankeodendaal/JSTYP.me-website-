@@ -1,3 +1,4 @@
+
 import React, { useMemo } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { usePinRecords } from '../hooks/usePinRecords';
@@ -6,7 +7,8 @@ import { useRedownloadRequests } from '../hooks/useRedownloadRequests';
 import Header from './Header';
 import LoadingSpinner from './LoadingSpinner';
 import { DownloadIcon, ArrowLeftIcon } from './IconComponents';
-import { Link } from 'react-router-dom';
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { Link } from "react-router-dom";
 
 const ClientDashboardPage: React.FC = () => {
     const { currentUser } = useAuth();

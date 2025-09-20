@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { AppShowcaseItem } from '../../types';
 import { PlusCircleIcon, SparklesIcon } from '../IconComponents';
-import { generateAppListing, generateAppImage, generateAppDescription } from '../../services/geminiService';
+import { generateAppListing, generateAppImage } from '../../services/geminiService';
 import LoadingSpinner from '../LoadingSpinner';
 
 interface AppFormProps {

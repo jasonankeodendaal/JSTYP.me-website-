@@ -6,7 +6,7 @@ import * as api from '../services/api';
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { clients, addClient, loading: clientsLoading } = useClients();
+    const { addClient, loading: clientsLoading } = useClients();
     const [currentUser, setCurrentUser] = useState<Client | null>(null);
     const [loading, setLoading] = useState(true);
 

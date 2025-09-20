@@ -1,5 +1,7 @@
+
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { useNavigate } from "react-router-dom";
 import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from './LoadingSpinner';
 import Header from './Header';

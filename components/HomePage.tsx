@@ -1,5 +1,7 @@
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { Link } from "react-router-dom";
 import { useApps } from '../hooks/useApps';
 import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
 import { useAuth } from '../contexts/AuthContext';

@@ -1,5 +1,7 @@
+
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { useNavigate } from "react-router-dom";
 import { usePinRecords } from '../hooks/usePinRecords';
 import { useAuth } from '../contexts/AuthContext';
 import { AndroidIcon, AppleIcon, GlobeIcon } from './IconComponents';
