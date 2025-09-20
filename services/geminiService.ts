@@ -4,8 +4,8 @@ import type { AppShowcaseItem, AboutPageContent } from '../types';
 // Helper function to lazily initialize the AI client.
 // This prevents the app from crashing on start if the API key is missing.
 const getAiClient = () => {
-  // Safely check for process and env to prevent crash in browser environments.
-  const apiKey = typeof process !== 'undefined' && process.env ? process.env.API_KEY : undefined;
+  // FIX: Use process.env.API_KEY as per the guidelines to resolve the TypeScript error.
+  const apiKey = process.env.API_KEY;
 
   if (!apiKey) {
     // This error will be caught by the calling functions.

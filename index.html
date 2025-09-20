@@ -70,34 +70,17 @@
 <script type="importmap">
 {
   "imports": {
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
     "react/": "https://aistudiocdn.com/react@^19.1.1/",
     "react": "https://aistudiocdn.com/react@^19.1.1",
-    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.1"
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.1",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0"
   }
 }
 </script>
-<!-- Add Babel to transpile JSX and TSX in the browser -->
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body class="font-sans">
     <div id="root"></div>
-    <!-- Fallback for script loading errors -->
-    <script>
-      setTimeout(() => {
-        const root = document.getElementById('root');
-        if (root && root.innerHTML.trim() === '') {
-          root.innerHTML = `
-            <div style="color: white; text-align: center; padding: 4rem 1rem; font-family: ${getComputedStyle(document.body).fontFamily || 'sans-serif'};">
-              <h1 style="font-size: 2rem; font-weight: bold; color: #ef4444;">Application failed to load</h1>
-              <p style="margin-top: 1rem; color: #d1d5db;">This can happen if essential scripts are blocked or fail to execute. Please ensure JavaScript is enabled and check the browser console for specific errors.</p>
-            </div>
-          `;
-        }
-      }, 3000);
-    </script>
-    <!-- Change script type to text/babel for Babel to process it -->
-    <script type="text/babel" data-type="module" src="/index.tsx"></script>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>
