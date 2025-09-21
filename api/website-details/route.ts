@@ -3,7 +3,7 @@ import { put } from '@vercel/blob';
 import { Buffer } from 'buffer';
 import type { WebsiteDetails } from '../../types';
 
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
     try {
         const { rows } = await sql`SELECT details FROM website_details WHERE id = 1;`;
         if (rows.length === 0) {

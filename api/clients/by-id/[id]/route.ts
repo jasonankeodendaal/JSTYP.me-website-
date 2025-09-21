@@ -1,6 +1,6 @@
 import { sql } from '@vercel/postgres';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(_request: Request, { params }: { params: { id: string } }) {
     try {
         const id = params.id;
         const { rows } = await sql`SELECT * FROM clients WHERE id = ${id};`;

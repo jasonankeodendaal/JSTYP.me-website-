@@ -8,7 +8,7 @@ const generateRandomPin = (length = 6) => {
     return result;
 };
 
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
     try {
         const { rows: getRows } = await sql`SELECT * FROM pin_records ORDER BY generatedAt DESC;`;
         return new Response(JSON.stringify(getRows), { status: 200, headers: { 'Content-Type': 'application/json' } });

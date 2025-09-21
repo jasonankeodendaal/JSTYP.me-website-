@@ -1,7 +1,7 @@
 import { sql } from '@vercel/postgres';
 import type { AppShowcaseItem } from '../../types';
 
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
     try {
         const { rows } = await sql`SELECT * FROM apps;`;
         return new Response(JSON.stringify(rows), { status: 200, headers: { 'Content-Type': 'application/json' } });

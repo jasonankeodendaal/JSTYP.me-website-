@@ -1,7 +1,7 @@
 import { sql } from '@vercel/postgres';
 import type { TeamMember } from '../../types';
 
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
     try {
         const { rows } = await sql<TeamMember>`SELECT * FROM team_members;`;
         return new Response(JSON.stringify(rows), { status: 200, headers: { 'Content-Type': 'application/json' } });

@@ -1,7 +1,7 @@
 import { sql } from '@vercel/postgres';
 import type { AppShowcaseItem } from '../../../types';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(_request: Request, { params }: { params: { id: string } }) {
     try {
         const id = params.id;
         const { rows } = await sql<AppShowcaseItem>`SELECT * FROM apps WHERE id = ${id};`;
@@ -27,7 +27,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
     try {
         const id = params.id;
         await sql`DELETE FROM apps WHERE id = ${id};`;
