@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres';
-import type { RedownloadRequest } from '../../types';
+import type { RedownloadRequest } from '../types';
 
 export default async function handler(request: Request) {
     const { method, url } = request;

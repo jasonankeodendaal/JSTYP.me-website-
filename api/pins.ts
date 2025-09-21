@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres';
-import type { PinRecord } from '../../types';
+import type { PinRecord } from '../types';
 
 const generateRandomPin = (length = 6) => {
     const chars = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';

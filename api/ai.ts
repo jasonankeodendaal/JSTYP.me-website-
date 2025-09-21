@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import type { AppShowcaseItem } from '../../types';
+import type { AppShowcaseItem } from '../types';
 
 export default async function handler(request: Request) {
     try {

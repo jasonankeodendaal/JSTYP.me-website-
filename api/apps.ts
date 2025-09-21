@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres';
-import type { AppShowcaseItem } from '../../types';
+import type { AppShowcaseItem } from '../types';
 
 export default async function handler(request: Request) {
     const { method, url } = request;
@@ -39,7 +39,7 @@ export default async function handler(request: Request) {
 
                     const app = rows[0];
                     const currentRatings = app.ratings || [];
-                    const existingRatingIndex = currentRatings.findIndex(r => r.clientId === clientId);
+                    const existingRatingIndex = currentRatings.findIndex((r: { clientId: string; rating: number }) => r.clientId === clientId);
 
                     if (existingRatingIndex > -1) {
                         currentRatings[existingRatingIndex].rating = rating;

@@ -1,7 +1,7 @@
 import { sql } from '@vercel/postgres';
 import { put } from '@vercel/blob';
 import { Buffer } from 'buffer';
-import type { WebsiteDetails } from '../../types';
+import type { WebsiteDetails } from '../types';
 
 export default async function handler(request: Request) {
     const { method } = request;

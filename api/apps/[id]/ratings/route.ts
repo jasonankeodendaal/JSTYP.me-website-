@@ -19,7 +19,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     const app = rows[0];
     const currentRatings = app.ratings || [];
 
-    const existingRatingIndex = currentRatings.findIndex(r => r.clientId === clientId);
+    const existingRatingIndex = currentRatings.findIndex((r: { clientId: string; rating: number }) => r.clientId === clientId);
 
     if (existingRatingIndex > -1) {
         currentRatings[existingRatingIndex].rating = rating;
