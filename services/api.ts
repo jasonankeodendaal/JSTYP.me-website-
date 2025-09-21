@@ -65,18 +65,18 @@ export const updateApp = async (appToUpdate: AppShowcaseItem): Promise<AppShowca
 
     const appWithUrls = { ...appToUpdate, imageUrl, heroImageUrl, screenshots };
     
-    return apiFetch(`/api/apps/${appToUpdate.id}`, {
+    return apiFetch(`/api/apps`, {
         method: 'PUT',
         body: JSON.stringify(appWithUrls),
     });
 };
 
-export const deleteApp = (appId: string): Promise<void> => apiFetch(`/api/apps/${appId}`, { method: 'DELETE' });
+export const deleteApp = (appId: string): Promise<void> => apiFetch(`/api/apps?id=${appId}`, { method: 'DELETE' });
 
 export const addAppRating = (appId: string, clientId: string, rating: number): Promise<AppShowcaseItem> => {
-    return apiFetch(`/api/apps/${appId}`, {
-        method: 'POST',
-        body: JSON.stringify({ clientId, rating }),
+    return apiFetch(`/api/apps`, {
+        method: 'PATCH',
+        body: JSON.stringify({ appId, clientId, rating }),
     });
 };
 
@@ -141,13 +141,13 @@ export const createTeamMember = async (newMember: Omit<TeamMember, 'id'>): Promi
 
 export const updateTeamMember = async (memberToUpdate: TeamMember): Promise<TeamMember> => {
     const profileImageUrl = await uploadImage(memberToUpdate.profileImageUrl);
-    return apiFetch(`/api/team-members/${memberToUpdate.id}`, {
+    return apiFetch(`/api/team-members`, {
         method: 'PUT',
         body: JSON.stringify({ ...memberToUpdate, profileImageUrl }),
     });
 };
 
-export const deleteTeamMember = (memberId: string): Promise<void> => apiFetch(`/api/team-members/${memberId}`, { method: 'DELETE' });
+export const deleteTeamMember = (memberId: string): Promise<void> => apiFetch(`/api/team-members?id=${memberId}`, { method: 'DELETE' });
 
 
 // --- PIN Records API ---

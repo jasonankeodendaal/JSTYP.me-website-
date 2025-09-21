@@ -6,13 +6,10 @@
     "api/ai/route.ts": {
       "maxDuration": 15
     },
-    "api/app-requests/route.ts": {
-      "maxDuration": 15
-    },
     "api/apps/route.ts": {
       "maxDuration": 15
     },
-    "api/apps/[id]/route.ts": {
+    "api/app-requests/route.ts": {
       "maxDuration": 15
     },
     "api/clients/route.ts": {
@@ -25,9 +22,6 @@
       "maxDuration": 15
     },
     "api/team-members/route.ts": {
-      "maxDuration": 15
-    },
-    "api/team-members/[id]/route.ts": {
       "maxDuration": 15
     },
     "api/website-details/route.ts": {
