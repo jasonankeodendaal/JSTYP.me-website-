@@ -3,28 +3,49 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "functions": {
-    "api/ai.ts": {
+    "api/ai/route.ts": {
       "maxDuration": 15
     },
-    "api/app-requests.ts": {
+    "api/app-requests/route.ts": {
       "maxDuration": 15
     },
-    "api/apps.ts": {
+    "api/app-requests/[id]/route.ts": {
       "maxDuration": 15
     },
-    "api/clients.ts": {
+    "api/apps/route.ts": {
       "maxDuration": 15
     },
-    "api/pins.ts": {
+    "api/apps/[id]/route.ts": {
       "maxDuration": 15
     },
-    "api/redownload-requests.ts": {
+    "api/apps/[id]/ratings/route.ts": {
       "maxDuration": 15
     },
-    "api/team-members.ts": {
+    "api/clients/route.ts": {
       "maxDuration": 15
     },
-    "api/website-details.ts": {
+     "api/clients/by-id/[id]/route.ts": {
+      "maxDuration": 15
+    },
+     "api/clients/by-email/route.ts": {
+      "maxDuration": 15
+    },
+    "api/pins/route.ts": {
+      "maxDuration": 15
+    },
+    "api/redownload-requests/route.ts": {
+      "maxDuration": 15
+    },
+    "api/redownload-requests/[id]/route.ts": {
+      "maxDuration": 15
+    },
+    "api/team-members/route.ts": {
+      "maxDuration": 15
+    },
+    "api/team-members/[id]/route.ts": {
+      "maxDuration": 15
+    },
+    "api/website-details/route.ts": {
       "maxDuration": 15
     }
   }
