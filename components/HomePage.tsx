@@ -1,5 +1,4 @@
 
-import React from 'react';
 // FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
 import { Link } from "react-router-dom";
 import { useApps } from '../hooks/useApps';
@@ -132,14 +131,6 @@ const Footer: React.FC = () => {
 
 
 const HomePage: React.FC = () => {
-    const { details, loading } = useWebsiteDetails();
-
-    React.useEffect(() => {
-        if (!loading && details?.themeColor) {
-            document.documentElement.style.setProperty('--glow-color', details.themeColor);
-        }
-    }, [details?.themeColor, loading]);
-
     return (
         <div className="bg-[var(--background-color)]">
             <Header />

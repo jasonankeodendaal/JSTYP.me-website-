@@ -1,5 +1,4 @@
 
-import React from 'react';
 
 const LoadingSpinner: React.FC<{ size?: number }> = ({ size = 8 }) => {
   return (
