@@ -74,7 +74,7 @@ export const updateApp = async (appToUpdate: AppShowcaseItem): Promise<AppShowca
 export const deleteApp = (appId: string): Promise<void> => apiFetch(`/api/apps/${appId}`, { method: 'DELETE' });
 
 export const addAppRating = (appId: string, clientId: string, rating: number): Promise<AppShowcaseItem> => {
-    return apiFetch(`/api/apps/${appId}/ratings`, {
+    return apiFetch(`/api/apps/${appId}`, {
         method: 'POST',
         body: JSON.stringify({ clientId, rating }),
     });
@@ -170,9 +170,9 @@ export const redeemPin = (pin: string, appId: string, client?: { id: string, nam
 // --- Clients API ---
 export const getClients = (): Promise<Client[]> => apiFetch('/api/clients');
 
-export const getClientById = (id: string): Promise<Client | null> => apiFetch(`/api/clients/by-id/${id}`);
+export const getClientById = (id: string): Promise<Client | null> => apiFetch(`/api/clients?id=${id}`);
 
-export const getClientByEmail = (email: string): Promise<Client | null> => apiFetch(`/api/clients/by-email?email=${encodeURIComponent(email)}`);
+export const getClientByEmail = (email: string): Promise<Client | null> => apiFetch(`/api/clients?email=${encodeURIComponent(email)}`);
 
 export const createClient = (newClientData: Omit<Client, 'id'>): Promise<Client> => {
     return apiFetch('/api/clients', {

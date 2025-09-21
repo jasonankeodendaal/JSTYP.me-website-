@@ -18,16 +18,7 @@
     "api/apps/[id]/route.ts": {
       "maxDuration": 15
     },
-    "api/apps/[id]/ratings/route.ts": {
-      "maxDuration": 15
-    },
     "api/clients/route.ts": {
-      "maxDuration": 15
-    },
-     "api/clients/by-id/[id]/route.ts": {
-      "maxDuration": 15
-    },
-     "api/clients/by-email/route.ts": {
       "maxDuration": 15
     },
     "api/pins/route.ts": {
