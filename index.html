@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <style>
+        html, body, #root {
+            height: 100%;
+        }
         html {
             scroll-behavior: smooth;
         }
@@ -65,6 +68,54 @@
         }
         .animate-futuristic-glow {
           animation: futuristic-glow 4s ease-in-out infinite;
+        }
+
+        /* NEW ANIMATIONS FOR TEXT CAROUSEL */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--glow-color); }
+        }
+        .animate-typing {
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: .15em solid var(--glow-color);
+            margin: 0 auto;
+            display: inline-block;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-flash {
+            animation: flash 1.5s ease-in-out infinite;
+        }
+
+        @keyframes fade-in-out {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        .animate-fade {
+            animation: fade-in-out 4s ease-in-out infinite;
+        }
+
+        /* NEW ANIMATION FOR DIVIDER */
+        @keyframes equalizer {
+            0%, 100% { height: 4px; }
+            50% { height: 20px; }
+        }
+        .equalizer-bar {
+            display: inline-block;
+            width: 4px;
+            margin: 0 2px;
+            background-color: var(--glow-color);
+            animation: equalizer 1.5s ease-in-out infinite;
+            box-shadow: 0 0 2px var(--glow-color), 0 0 4px var(--glow-color);
         }
     </style>
 <script type="importmap">
