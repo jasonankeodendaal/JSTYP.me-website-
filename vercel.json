@@ -2,7 +2,28 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "functions": {
-    "api/*.ts": {
+    "api/ai.ts": {
+      "maxDuration": 15
+    },
+    "api/app-requests.ts": {
+      "maxDuration": 15
+    },
+    "api/apps.ts": {
+      "maxDuration": 15
+    },
+    "api/clients.ts": {
+      "maxDuration": 15
+    },
+    "api/pins.ts": {
+      "maxDuration": 15
+    },
+    "api/redownload-requests.ts": {
+      "maxDuration": 15
+    },
+    "api/team-members.ts": {
+      "maxDuration": 15
+    },
+    "api/website-details.ts": {
       "maxDuration": 15
     }
   }
