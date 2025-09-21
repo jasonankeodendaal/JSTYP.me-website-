@@ -1,10 +1,24 @@
 import { sql } from '@vercel/postgres';
 import type { Client } from '../../types';
 
-// GET all clients
-export async function GET() {
+// GET clients (all, by id, or by email)
+export async function GET(request: Request) {
   try {
-    const { rows } = await sql`SELECT id, name, email FROM clients;`; // Exclude password
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    const email = searchParams.get('email');
+
+    if (id) {
+        const { rows } = await sql`SELECT id, name, email FROM clients WHERE id = ${id};`;
+        return new Response(JSON.stringify(rows[0] || null), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+    
+    if (email) {
+        const { rows } = await sql`SELECT * FROM clients WHERE lower(email) = lower(${email});`;
+        return new Response(JSON.stringify(rows[0] || null), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+    
+    const { rows } = await sql`SELECT id, name, email FROM clients;`; // Exclude password for general list
     return new Response(JSON.stringify(rows), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
     return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500, headers: { 'Content-Type': 'application/json' } });

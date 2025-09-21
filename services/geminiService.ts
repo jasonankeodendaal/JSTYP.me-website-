@@ -16,7 +16,7 @@ const apiFetch = async <T>(url: string, body: object): Promise<T> => {
 
 export const generateAppDescription = async (keywords: string): Promise<string> => {
     try {
-        const { description } = await apiFetch<{ description: string }>('/api/ai/generate-description', { keywords });
+        const { description } = await apiFetch<{ description: string }>('/api/ai', { task: 'generate-description', keywords });
         return description;
     } catch (error) {
         console.error("Error generating description via backend:", error);
@@ -25,17 +25,17 @@ export const generateAppDescription = async (keywords: string): Promise<string> 
 };
 
 export const generateAppListing = async (idea: string): Promise<Partial<AppShowcaseItem>> => {
-    return apiFetch('/api/ai/generate-listing', { idea });
+    return apiFetch('/api/ai', { task: 'generate-listing', idea });
 };
 
 export const generateAppImage = async (prompt: string, aspectRatio: '1:1' | '16:9' = '1:1'): Promise<string> => {
-    const { imageUrl } = await apiFetch<{ imageUrl: string }>('/api/ai/generate-image', { prompt, aspectRatio });
+    const { imageUrl } = await apiFetch<{ imageUrl: string }>('/api/ai', { task: 'generate-image', prompt, aspectRatio });
     return imageUrl;
 };
 
 export const findMatchingApp = async (problem: string, apps: AppShowcaseItem[]): Promise<{ bestMatchAppId: string | null, reasoning: string }> => {
     try {
-        return await apiFetch('/api/ai/find-matching-app', { problem, apps });
+        return await apiFetch('/api/ai', { task: 'find-matching-app', problem, apps });
     } catch (error) {
         console.error("Error finding matching app via backend:", error);
         const reasoning = error instanceof Error ? error.message : "An error occurred while searching for a solution. Please try again.";
@@ -44,5 +44,5 @@ export const findMatchingApp = async (problem: string, apps: AppShowcaseItem[]):
 };
 
 export const generateAboutPageContent = async (rawText: string): Promise<AboutPageContent> => {
-    return apiFetch('/api/ai/generate-about-page', { rawText });
+    return apiFetch('/api/ai', { task: 'generate-about-page', rawText });
 };

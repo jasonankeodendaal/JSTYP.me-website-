@@ -34,7 +34,7 @@ const uploadImage = async (base64: string): Promise<string> => {
     if (!base64 || !base64.startsWith('data:image')) {
         return base64; // It's already a URL or empty
     }
-    const { url } = await apiFetch<{ url: string }>('/api/upload', {
+    const { url } = await apiFetch<{ url: string }>('/api/website-details', {
         method: 'POST',
         body: JSON.stringify({ file: base64 }),
     });
@@ -74,7 +74,7 @@ export const updateApp = async (appToUpdate: AppShowcaseItem): Promise<AppShowca
 export const deleteApp = (appId: string): Promise<void> => apiFetch(`/api/apps/${appId}`, { method: 'DELETE' });
 
 export const addAppRating = (appId: string, clientId: string, rating: number): Promise<AppShowcaseItem> => {
-    return apiFetch(`/api/apps/${appId}/ratings`, {
+    return apiFetch(`/api/apps/${appId}`, {
         method: 'POST',
         body: JSON.stringify({ clientId, rating }),
     });
@@ -161,23 +161,18 @@ export const createPinRecord = (data: Omit<PinRecord, 'id' | 'pin' | 'isRedeemed
 };
 
 export const redeemPin = (pin: string, appId: string, client?: { id: string, name: string }): Promise<PinRecord> => {
-    return apiFetch('/api/pins/redeem', {
+    return apiFetch('/api/pins', {
         method: 'POST',
-        body: JSON.stringify({ pin, appId, client }),
+        body: JSON.stringify({ pin, appId, client, action: 'redeem' }),
     });
 };
 
 // --- Clients API ---
 export const getClients = (): Promise<Client[]> => apiFetch('/api/clients');
 
-export const getClientById = (id: string): Promise<Client | null> => apiFetch(`/api/clients/by-id/${id}`);
+export const getClientById = (id: string): Promise<Client | null> => apiFetch(`/api/clients?id=${id}`);
 
-export const getClientByEmail = (email: string): Promise<Client | null> => {
-    return apiFetch('/api/clients/by-email', {
-        method: 'POST',
-        body: JSON.stringify({ email }),
-    });
-};
+export const getClientByEmail = (email: string): Promise<Client | null> => apiFetch(`/api/clients?email=${encodeURIComponent(email)}`);
 
 export const createClient = (newClientData: Omit<Client, 'id'>): Promise<Client> => {
     return apiFetch('/api/clients', {
