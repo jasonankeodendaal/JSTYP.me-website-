@@ -1,4 +1,5 @@
-import { db } from '@vercel/postgres';
+import { Pool } from 'pg';
+import 'dotenv/config';
 import type { AppShowcaseItem, WebsiteDetails, TeamMember, Client } from '../types';
 
 // Mock data copied from the original api.ts
@@ -68,11 +69,13 @@ const MOCK_CLIENTS: Client[] = [
     { id: 'client-2', name: 'Jane Smith', email: 'jane@example.com', password: 'password123' }
 ];
 
-async function main() {
-  const client = await db.connect();
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL,
+});
 
+async function main() {
   console.log('Creating tables...');
-  await client.sql`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS apps (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
@@ -92,23 +95,23 @@ async function main() {
       apkUrl TEXT,
       iosUrl TEXT,
       pwaUrl TEXT
-    );`;
+    );`);
 
-  await client.sql`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS app_requests (
       id TEXT PRIMARY KEY,
       problemDescription TEXT NOT NULL,
       status TEXT NOT NULL,
       submittedAt TIMESTAMPTZ NOT NULL
-    );`;
+    );`);
 
-  await client.sql`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS website_details (
       id INT PRIMARY KEY,
       details JSONB NOT NULL
-    );`;
+    );`);
 
-  await client.sql`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS pin_records (
       id TEXT PRIMARY KEY,
       pin TEXT UNIQUE NOT NULL,
@@ -120,9 +123,9 @@ async function main() {
       isRedeemed BOOLEAN NOT NULL,
       generatedAt TIMESTAMPTZ NOT NULL,
       redeemedAt TIMESTAMPTZ
-    );`;
+    );`);
 
-  await client.sql`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS team_members (
       id TEXT PRIMARY KEY,
       firstName TEXT NOT NULL,
@@ -132,17 +135,17 @@ async function main() {
       pin TEXT UNIQUE NOT NULL,
       role TEXT,
       profileImageUrl TEXT
-    );`;
+    );`);
 
-  await client.sql`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS clients (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
       email TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL
-    );`;
+    );`);
 
-  await client.sql`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS redownload_requests (
       id TEXT PRIMARY KEY,
       clientId TEXT NOT NULL,
@@ -152,7 +155,7 @@ async function main() {
       status TEXT NOT NULL,
       requestedAt TIMESTAMPTZ NOT NULL,
       resolutionNotes TEXT
-    );`;
+    );`);
   console.log('Tables created successfully.');
 
 
@@ -160,46 +163,47 @@ async function main() {
   
   // Seed apps
   for (const app of MOCK_APPS) {
-    await client.sql`
+    await pool.query(`
       INSERT INTO apps (id, name, description, imageUrl, heroImageUrl, longDescription, price, screenshots, features, abilities, whyItWorks, dedicatedPurpose, termsAndConditions, ratings, pinCode, apkUrl, iosUrl, pwaUrl)
-      VALUES (${app.id}, ${app.name}, ${app.description}, ${app.imageUrl}, ${app.heroImageUrl}, ${app.longDescription}, ${app.price}, ${JSON.stringify(app.screenshots)}, ${JSON.stringify(app.features)}, ${JSON.stringify(app.abilities)}, ${app.whyItWorks}, ${app.dedicatedPurpose}, ${app.termsAndConditions}, ${JSON.stringify(app.ratings)}, ${app.pinCode}, ${app.apkUrl}, ${app.iosUrl}, ${app.pwaUrl})
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
       ON CONFLICT (id) DO NOTHING;
-    `;
+    `, [app.id, app.name, app.description, app.imageUrl, app.heroImageUrl, app.longDescription, app.price, JSON.stringify(app.screenshots), JSON.stringify(app.features), JSON.stringify(app.abilities), app.whyItWorks, app.dedicatedPurpose, app.termsAndConditions, JSON.stringify(app.ratings), app.pinCode, app.apkUrl, app.iosUrl, app.pwaUrl]);
   }
   console.log('Seeded apps.');
 
   // Seed website_details (using a single row with id=1)
-  await client.sql`
+  await pool.query(`
     INSERT INTO website_details (id, details)
-    VALUES (1, ${JSON.stringify(MOCK_DETAILS)})
-    ON CONFLICT (id) DO UPDATE SET details = ${JSON.stringify(MOCK_DETAILS)};
-  `;
+    VALUES (1, $1)
+    ON CONFLICT (id) DO UPDATE SET details = $1;
+  `, [JSON.stringify(MOCK_DETAILS)]);
   console.log('Seeded website details.');
 
   // Seed team members
   for (const member of MOCK_TEAM) {
-    await client.sql`
+    await pool.query(`
       INSERT INTO team_members (id, firstName, lastName, tel, email, pin, role, profileImageUrl)
-      VALUES (${member.id}, ${member.firstName}, ${member.lastName}, ${member.tel}, ${member.email}, ${member.pin}, ${member.role}, ${member.profileImageUrl})
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       ON CONFLICT (id) DO NOTHING;
-    `;
+    `, [member.id, member.firstName, member.lastName, member.tel, member.email, member.pin, member.role, member.profileImageUrl]);
   }
   console.log('Seeded team members.');
 
   // Seed clients
   for (const c of MOCK_CLIENTS) {
-    await client.sql`
+    await pool.query(`
       INSERT INTO clients (id, name, email, password)
-      VALUES (${c.id}, ${c.name}, ${c.email}, ${c.password})
+      VALUES ($1, $2, $3, $4)
       ON CONFLICT (id) DO NOTHING;
-    `;
+    `, [c.id, c.name, c.email, c.password]);
   }
   console.log('Seeded clients.');
   
   console.log('Database seeding complete!');
-  await client.release();
+  await pool.end();
 }
 
 main().catch(err => {
   console.error('An error occurred while seeding the database:', err);
+  pool.end();
 });

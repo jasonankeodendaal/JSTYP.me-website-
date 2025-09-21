@@ -34,7 +34,7 @@ const uploadImage = async (base64: string): Promise<string> => {
     if (!base64 || !base64.startsWith('data:image')) {
         return base64; // It's already a URL or empty
     }
-    const { url } = await apiFetch<{ url: string }>('/api/website-details', {
+    const { url } = await apiFetch<{ url: string }>('/api/upload', {
         method: 'POST',
         body: JSON.stringify({ file: base64 }),
     });

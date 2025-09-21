@@ -6,11 +6,11 @@ export default defineConfig({
   plugins: [react()],
   // Re-added the server proxy to ensure API requests work robustly in local development.
   // This forwards any requests from the Vite dev server (e.g., from localhost:5173/api/...)
-  // to the Vercel serverless function backend (running on localhost:3000 by `vercel dev`).
+  // to the local Express server (running on localhost:3001).
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3001',
         changeOrigin: true,
       },
     }
