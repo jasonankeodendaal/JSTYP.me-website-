@@ -1,10 +1,8 @@
 
 
-
-// FIX: Use namespace import for react-router-dom to fix module resolution errors.
-import * as ReactRouterDom from "react-router-dom";
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { Link } from "react-router-dom";
 import { useApps } from '../hooks/useApps';
-import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
 import { useAuth } from '../contexts/AuthContext';
 import { useTeamMembers } from '../hooks/useTeamMembers';
 import AppCard from './AppCard';
@@ -40,19 +38,19 @@ const Hero: React.FC = () => {
                     </p>
                     <div className="mt-10">
                         {currentUser ? (
-                             <ReactRouterDom.Link 
+                             <Link 
                                 to="/dashboard"
                                 className="bg-orange-500 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/50 transform hover:scale-105 inline-block"
                             >
                                Go to Your Dashboard
-                            </ReactRouterDom.Link>
+                            </Link>
                         ) : (
-                            <ReactRouterDom.Link 
+                            <Link 
                                 to="/auth"
                                 className="bg-orange-500 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/50 transform hover:scale-105 inline-block"
                             >
                                 Login / Sign Up
-                            </ReactRouterDom.Link>
+                            </Link>
                         )}
                     </div>
                 </div>
@@ -105,9 +103,9 @@ const AppShowcase: React.FC = () => {
                 ) : (
                     <div className="grid grid-cols-3 gap-4">
                         {apps.filter(app => app && app.id && app.name && app.imageUrl).map(app => (
-                            <ReactRouterDom.Link to={`/app/${app.id}`} key={app.id} className="focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-xl" aria-label={`View details for ${app.name}`}>
+                            <Link to={`/app/${app.id}`} key={app.id} className="focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-xl" aria-label={`View details for ${app.name}`}>
                                 <AppCard app={app} />
-                            </ReactRouterDom.Link>
+                            </Link>
                         ))}
                     </div>
                 )}
@@ -116,11 +114,12 @@ const AppShowcase: React.FC = () => {
     );
 };
 
+
 const HomePage: React.FC = () => {
     return (
-        <div className="bg-[var(--background-color)] min-h-screen flex flex-col">
+        <div className="bg-[var(--background-color)]">
             <Header />
-            <main className="flex-grow">
+            <main>
                 <Hero />
 
                 <div className="py-8">

@@ -1,8 +1,8 @@
 
 
 import { useState, useEffect } from 'react';
-// FIX: Use namespace import for react-router-dom to fix module resolution errors.
-import * as ReactRouterDom from "react-router-dom";
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import HomePage from './components/HomePage';
 import AdminPage from './components/AdminPage';
 import AppDetailPage from './components/AppDetailPage';
@@ -71,7 +71,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactElement }> = ({ children }
             </div>
         );
     }
-    return currentUser ? children : <ReactRouterDom.Navigate to="/auth" />;
+    return currentUser ? children : <Navigate to="/auth" />;
 };
 
 const ThemeApplicator: React.FC<{children: React.ReactNode}> = ({children}) => {
@@ -101,18 +101,18 @@ const AppRoutes: React.FC = () => {
   }
 
   return (
-    <ReactRouterDom.HashRouter>
+    <HashRouter>
       <ThemeApplicator>
-          <ReactRouterDom.Routes>
-            <ReactRouterDom.Route path="/" element={<HomePage />} />
-            <ReactRouterDom.Route path="/about" element={<AboutPage />} />
-            <ReactRouterDom.Route path="/app/:id" element={<AppDetailPage />} />
-            <ReactRouterDom.Route path="/admin" element={<AdminPage />} />
-            <ReactRouterDom.Route path="/auth" element={<ClientAuthPage />} />
-            <ReactRouterDom.Route path="/dashboard" element={<ProtectedRoute><ClientDashboardPage /></ProtectedRoute>} />
-          </ReactRouterDom.Routes>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/app/:id" element={<AppDetailPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/auth" element={<ClientAuthPage />} />
+            <Route path="/dashboard" element={<ProtectedRoute><ClientDashboardPage /></ProtectedRoute>} />
+          </Routes>
       </ThemeApplicator>
-    </ReactRouterDom.HashRouter>
+    </HashRouter>
   );
 }
 

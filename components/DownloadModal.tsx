@@ -1,8 +1,8 @@
 
 
 import React, { useState } from 'react';
-// FIX: Use namespace import for react-router-dom to fix module resolution errors.
-import * as ReactRouterDom from "react-router-dom";
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { useNavigate } from "react-router-dom";
 import { usePinRecords } from '../hooks/usePinRecords';
 import { useAuth } from '../contexts/AuthContext';
 import { AndroidIcon, AppleIcon, GlobeIcon } from './IconComponents';
@@ -22,7 +22,7 @@ const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose, app }) =
     const [isVerified, setIsVerified] = useState(false);
     const { verifyAndRedeemPin } = usePinRecords();
     const { currentUser } = useAuth();
-    const navigate = ReactRouterDom.useNavigate();
+    const navigate = useNavigate();
 
     const handleVerify = async () => {
         setError('');

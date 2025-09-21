@@ -1,86 +1,99 @@
 import React from 'react';
-// FIX: Use namespace import for react-router-dom to fix module resolution errors.
-import * as ReactRouterDom from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
-import { PhoneIcon, EnvelopeIcon, MapPinIcon, WhatsAppIcon } from './IconComponents';
+import { PhoneIcon, WhatsAppIcon, EnvelopeIcon, MapPinIcon } from './IconComponents';
 
 const Footer: React.FC = () => {
     const { details, loading } = useWebsiteDetails();
 
     if (loading || !details) {
-        return null;
+        // Render a skeleton or null while loading to prevent layout shifts
+        return (
+            <footer className="py-12 px-4 md:px-8 bg-black border-t border-gray-800">
+                <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 animate-pulse">
+                    <div className="space-y-4">
+                        <div className="w-1/2 h-8 bg-gray-700 rounded"></div>
+                        <div className="w-3/4 h-4 bg-gray-700 rounded"></div>
+                    </div>
+                    <div className="space-y-2">
+                         <div className="w-1/3 h-6 bg-gray-700 rounded mb-4"></div>
+                         <div className="w-full h-4 bg-gray-700 rounded"></div>
+                         <div className="w-full h-4 bg-gray-700 rounded"></div>
+                    </div>
+                     <div className="space-y-2">
+                         <div className="w-1/3 h-6 bg-gray-700 rounded mb-4"></div>
+                         <div className="w-full h-4 bg-gray-700 rounded"></div>
+                         <div className="w-full h-4 bg-gray-700 rounded"></div>
+                    </div>
+                </div>
+            </footer>
+        );
     }
 
-    const handleAppsLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        if (window.location.pathname === '/') {
-            e.preventDefault();
-            const appsSection = document.getElementById('apps');
-            if (appsSection) {
-                appsSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    };
-
     return (
-        <footer className="bg-[var(--background-color)]/80 backdrop-blur-sm border-t border-[var(--border-color)] text-gray-300">
+        <footer className="bg-[var(--card-color)]/30 border-t border-[var(--border-color)] text-gray-400">
             <div className="container mx-auto py-12 px-4 md:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-                    {/* Column 1: Branding */}
-                    <div>
-                        <ReactRouterDom.Link to="/" className="flex items-center justify-center md:justify-start gap-3 text-2xl font-bold mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                    {/* Company Info */}
+                    <div className="lg:col-span-2">
+                         <Link to="/" className="flex items-center gap-3 text-3xl font-bold text-white mb-4">
                             {details.logoUrl && <img src={details.logoUrl} alt="logo" className="w-10 h-10 rounded-full" />}
                             <span>
                                 <span className="text-orange-500 text-glow">{details.companyName.split(' ')[0]}</span>
                                 {details.companyName.split(' ').slice(1).join(' ')}
                             </span>
-                        </ReactRouterDom.Link>
-                        <p className="text-gray-400">The Future, Delivered.</p>
+                        </Link>
+                        <p className="max-w-md">
+                            Crafting innovative AI-powered applications to solve real-world problems and drive the future of technology.
+                        </p>
                     </div>
 
-                    {/* Column 2: Quick Links */}
+                    {/* Quick Links */}
                     <div>
-                        <h3 className="text-xl font-bold text-white mb-4">Quick Links</h3>
+                        <h3 className="font-bold text-lg text-white mb-4">Quick Links</h3>
                         <ul className="space-y-2">
-                            <li><ReactRouterDom.Link to="/" className="hover:text-orange-500 transition-colors">Home</ReactRouterDom.Link></li>
-                            <li><ReactRouterDom.Link to="/about" className="hover:text-orange-500 transition-colors">About Us</ReactRouterDom.Link></li>
-                            <li><a href="/#apps" onClick={handleAppsLinkClick} className="hover:text-orange-500 transition-colors">Our Apps</a></li>
-                            <li><ReactRouterDom.Link to="/dashboard" className="hover:text-orange-500 transition-colors">Client Dashboard</ReactRouterDom.Link></li>
+                            <li><Link to="/" className="hover:text-orange-500 transition-colors">Home</Link></li>
+                            <li><Link to="/about" className="hover:text-orange-500 transition-colors">About Us</Link></li>
+                            <li><Link to="/dashboard" className="hover:text-orange-500 transition-colors">Client Dashboard</Link></li>
+                            <li><a href="/#apps" className="hover:text-orange-500 transition-colors">Our Apps</a></li>
                         </ul>
                     </div>
-
-                    {/* Column 3: Contact Info */}
+                    
+                    {/* Contact Info */}
                     <div>
-                        <h3 className="text-xl font-bold text-white mb-4">Contact Us</h3>
+                        <h3 className="font-bold text-lg text-white mb-4">Contact Us</h3>
                         <ul className="space-y-3">
                             {details.tel && (
-                                <li className="flex items-center justify-center md:justify-start gap-3">
-                                    <PhoneIcon className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                                    <a href={`tel:${details.tel}`} className="hover:text-orange-500 transition-colors">{details.tel}</a>
-                                </li>
-                            )}
-                            {details.email && (
-                                <li className="flex items-center justify-center md:justify-start gap-3">
-                                    <EnvelopeIcon className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                                    <a href={`mailto:${details.email}`} className="hover:text-orange-500 transition-colors break-all">{details.email}</a>
+                                <li className="flex items-start gap-3">
+                                    <PhoneIcon className="w-5 h-5 mt-1 text-orange-500 flex-shrink-0" />
+                                    <span>{details.tel}</span>
                                 </li>
                             )}
                              {details.whatsapp && (
-                                <li className="flex items-center justify-center md:justify-start gap-3">
-                                    <WhatsAppIcon className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                                    <a href={details.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-orange-500 transition-colors">Chat on WhatsApp</a>
+                                <li className="flex items-start gap-3">
+                                    <WhatsAppIcon className="w-5 h-5 mt-1 text-orange-500 flex-shrink-0" />
+                                    <a href={details.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-orange-500 transition-colors">Message on WhatsApp</a>
                                 </li>
                             )}
-                            {details.address && (
-                                <li className="flex items-start justify-center md:justify-start gap-3">
-                                    <MapPinIcon className="w-5 h-5 text-orange-500 flex-shrink-0 mt-1" />
+                            {details.email && (
+                                <li className="flex items-start gap-3">
+                                    <EnvelopeIcon className="w-5 h-5 mt-1 text-orange-500 flex-shrink-0" />
+                                    <span>{details.email}</span>
+                                </li>
+                            )}
+                             {details.address && (
+                                <li className="flex items-start gap-3">
+                                    <MapPinIcon className="w-5 h-5 mt-1 text-orange-500 flex-shrink-0" />
                                     <span>{details.address}</span>
                                 </li>
                             )}
                         </ul>
                     </div>
                 </div>
-                <div className="mt-12 pt-8 border-t border-[var(--border-color)] text-center text-gray-400">
+
+                <div className="border-t border-[var(--border-color)] pt-8 text-center">
                     <p>&copy; {new Date().getFullYear()} {details.companyName}. All Rights Reserved.</p>
+                    <p className="text-sm mt-1">The Future, Delivered.</p>
                 </div>
             </div>
         </footer>

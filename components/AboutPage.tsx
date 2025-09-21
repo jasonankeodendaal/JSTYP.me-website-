@@ -1,14 +1,13 @@
 
 
-
 import React from 'react';
 import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
 import Header from './Header';
 import Footer from './Footer';
 import LoadingSpinner from './LoadingSpinner';
 import type { AboutPageSection } from '../types';
-// FIX: Use namespace import for react-router-dom to fix module resolution errors.
-import * as ReactRouterDom from "react-router-dom";
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { Link } from "react-router-dom";
 import { ArrowLeftIcon } from './IconComponents';
 
 const AboutPage: React.FC = () => {
@@ -39,16 +38,16 @@ const AboutPage: React.FC = () => {
     );
 
     return (
-        <div className="bg-[var(--background-color)] text-[var(--text-color)] min-h-screen flex flex-col">
+        <div className="bg-[var(--background-color)] text-[var(--text-color)] min-h-screen">
             <Header sticky />
-            <main className="container mx-auto py-24 px-4 flex-grow">
-                <ReactRouterDom.Link 
+            <main className="container mx-auto py-24 px-4">
+                <Link 
                     to="/" 
                     className="mb-12 inline-flex items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors font-semibold"
                 >
                     <ArrowLeftIcon className="w-5 h-5" />
                     Back to Homepage
-                </ReactRouterDom.Link>
+                </Link>
                 {content ? (
                     <div className="space-y-24">
                         <div className="text-center max-w-4xl mx-auto">

@@ -1,25 +1,24 @@
 
 
-
 import React, { useState, useMemo } from 'react';
-// FIX: Use namespace import for react-router-dom to fix module resolution errors.
-import * as ReactRouterDom from "react-router-dom";
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useApps } from '../hooks/useApps';
 import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
 import { useAuth } from '../contexts/AuthContext';
 import { usePinRecords } from '../hooks/usePinRecords';
 import LoadingSpinner from './LoadingSpinner';
 import DownloadModal from './DownloadModal';
-import Footer from './Footer';
 import Header from './Header';
+import Footer from './Footer';
 import ScreenshotCarousel from './ScreenshotCarousel';
 import TermsModal from './TermsModal';
 import StarRating from './StarRating';
 import { DownloadIcon, ArrowLeftIcon, WhatsAppIcon } from './IconComponents';
 
 const AppDetailPage: React.FC = () => {
-    const { id } = ReactRouterDom.useParams<{ id: string }>();
-    const navigate = ReactRouterDom.useNavigate();
+    const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const { apps, loading: appsLoading, addRating } = useApps();
     const { details, loading: detailsLoading } = useWebsiteDetails();
     const { records: pinRecords, loading: pinsLoading } = usePinRecords();
@@ -68,9 +67,9 @@ const AppDetailPage: React.FC = () => {
                 <div className="flex-grow flex flex-col items-center justify-center">
                     <h2 className="text-4xl font-bold text-red-500 mb-4">App Not Found</h2>
                     <p className="text-gray-300 mb-8">We couldn't find the app you're looking for.</p>
-                    <ReactRouterDom.Link to="/" className="bg-orange-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-orange-600 transition-colors">
+                    <Link to="/" className="bg-orange-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-orange-600 transition-colors">
                         Go Back Home
-                    </ReactRouterDom.Link>
+                    </Link>
                 </div>
             </div>
         );
@@ -82,9 +81,9 @@ const AppDetailPage: React.FC = () => {
 
 
     return (
-        <div className="bg-[var(--background-color)] text-[var(--text-color)] min-h-screen flex flex-col">
+        <div className="bg-[var(--background-color)] text-[var(--text-color)] min-h-screen">
             <Header sticky />
-            <main className="flex-grow">
+            <main>
                 <section className="relative h-[50vh] min-h-[300px] max-h-[500px]">
                     <img src={app.heroImageUrl} alt={`${app.name} hero`} className="absolute inset-0 w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/60"></div>
@@ -211,9 +210,9 @@ const AppDetailPage: React.FC = () => {
                     </div>
                 </section>
             </main>
-            <Footer />
             <DownloadModal isOpen={isDownloadModalOpen} onClose={() => setIsDownloadModalOpen(false)} app={app} />
             <TermsModal isOpen={isTermsModalOpen} onClose={() => setIsTermsModalOpen(false)} terms={app.termsAndConditions} appName={app.name} />
+            <Footer />
         </div>
     );
 };

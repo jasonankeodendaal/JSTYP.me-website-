@@ -1,8 +1,8 @@
 
 
 import { useState, useEffect } from 'react';
-// FIX: Use namespace import for react-router-dom to fix module resolution errors.
-import * as ReactRouterDom from "react-router-dom";
+// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import { useNavigate } from "react-router-dom";
 import { useApps } from '../hooks/useApps';
 import { useAppRequests } from '../hooks/useAppRequests';
 import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
@@ -19,7 +19,7 @@ import AppList from './admin/AppList';
 type AdminTab = 'apps' | 'pins' | 'userRequests' | 'redownloadRequests' | 'settings' | 'team' | 'about';
 
 const AdminPage: React.FC = () => {
-  const navigate = ReactRouterDom.useNavigate();
+  const navigate = useNavigate();
   const { apps, addApp, deleteApp, updateApp, loading: appsLoading } = useApps();
   const { requests, updateRequestStatus, loading: requestsLoading } = useAppRequests();
   const { details: siteDetails, updateDetails: updateSiteDetails, loading: detailsLoading } = useWebsiteDetails();
