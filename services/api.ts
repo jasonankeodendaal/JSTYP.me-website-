@@ -65,16 +65,16 @@ export const updateApp = async (appToUpdate: AppShowcaseItem): Promise<AppShowca
 
     const appWithUrls = { ...appToUpdate, imageUrl, heroImageUrl, screenshots };
     
-    return apiFetch(`/api/apps/${appToUpdate.id}`, {
+    return apiFetch(`/api/apps?id=${appToUpdate.id}`, {
         method: 'PUT',
         body: JSON.stringify(appWithUrls),
     });
 };
 
-export const deleteApp = (appId: string): Promise<void> => apiFetch(`/api/apps/${appId}`, { method: 'DELETE' });
+export const deleteApp = (appId: string): Promise<void> => apiFetch(`/api/apps?id=${appId}`, { method: 'DELETE' });
 
 export const addAppRating = (appId: string, clientId: string, rating: number): Promise<AppShowcaseItem> => {
-    return apiFetch(`/api/apps/${appId}`, {
+    return apiFetch(`/api/apps?id=${appId}`, {
         method: 'POST',
         body: JSON.stringify({ clientId, rating }),
     });
@@ -92,7 +92,7 @@ export const createAppRequest = (problemDescription: string): Promise<AppRequest
 };
 
 export const updateAppRequestStatus = (requestId: string, status: 'thinking' | 'done'): Promise<AppRequest> => {
-    return apiFetch(`/api/app-requests/${requestId}`, {
+    return apiFetch(`/api/app-requests?id=${requestId}`, {
         method: 'PATCH',
         body: JSON.stringify({ status }),
     });
@@ -141,13 +141,13 @@ export const createTeamMember = async (newMember: Omit<TeamMember, 'id'>): Promi
 
 export const updateTeamMember = async (memberToUpdate: TeamMember): Promise<TeamMember> => {
     const profileImageUrl = await uploadImage(memberToUpdate.profileImageUrl);
-    return apiFetch(`/api/team-members/${memberToUpdate.id}`, {
+    return apiFetch(`/api/team-members?id=${memberToUpdate.id}`, {
         method: 'PUT',
         body: JSON.stringify({ ...memberToUpdate, profileImageUrl }),
     });
 };
 
-export const deleteTeamMember = (memberId: string): Promise<void> => apiFetch(`/api/team-members/${memberId}`, { method: 'DELETE' });
+export const deleteTeamMember = (memberId: string): Promise<void> => apiFetch(`/api/team-members?id=${memberId}`, { method: 'DELETE' });
 
 
 // --- PIN Records API ---
@@ -193,7 +193,7 @@ export const createRedownloadRequest = (requestData: Omit<RedownloadRequest, 'id
 };
 
 export const updateRedownloadRequest = (requestId: string, status: 'approved' | 'denied', resolutionNotes: string): Promise<RedownloadRequest> => {
-    return apiFetch(`/api/redownload-requests/${requestId}`, {
+    return apiFetch(`/api/redownload-requests?id=${requestId}`, {
         method: 'PUT',
         body: JSON.stringify({ status, resolutionNotes }),
     });
