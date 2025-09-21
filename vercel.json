@@ -9,9 +9,6 @@
     "api/app-requests/route.ts": {
       "maxDuration": 15
     },
-    "api/app-requests/[id]/route.ts": {
-      "maxDuration": 15
-    },
     "api/apps/route.ts": {
       "maxDuration": 15
     },
@@ -25,9 +22,6 @@
       "maxDuration": 15
     },
     "api/redownload-requests/route.ts": {
-      "maxDuration": 15
-    },
-    "api/redownload-requests/[id]/route.ts": {
       "maxDuration": 15
     },
     "api/team-members/route.ts": {

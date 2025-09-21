@@ -92,9 +92,9 @@ export const createAppRequest = (problemDescription: string): Promise<AppRequest
 };
 
 export const updateAppRequestStatus = (requestId: string, status: 'thinking' | 'done'): Promise<AppRequest> => {
-    return apiFetch(`/api/app-requests/${requestId}`, {
+    return apiFetch(`/api/app-requests`, {
         method: 'PATCH',
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ id: requestId, status }),
     });
 };
 
@@ -193,8 +193,8 @@ export const createRedownloadRequest = (requestData: Omit<RedownloadRequest, 'id
 };
 
 export const updateRedownloadRequest = (requestId: string, status: 'approved' | 'denied', resolutionNotes: string): Promise<RedownloadRequest> => {
-    return apiFetch(`/api/redownload-requests/${requestId}`, {
+    return apiFetch(`/api/redownload-requests`, {
         method: 'PUT',
-        body: JSON.stringify({ status, resolutionNotes }),
+        body: JSON.stringify({ id: requestId, status, resolutionNotes }),
     });
 };
