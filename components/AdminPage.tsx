@@ -209,6 +209,14 @@ const AdminPage: React.FC = () => {
     setLoginError('Incorrect Username or PIN.');
     setPinInput('');
   };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('jstyp-admin-role');
+    setAuthState('unauthenticated');
+    setUserRole(null);
+    setUsernameInput('');
+    setPinInput('');
+  };
   
   const resetMemberForm = () => {
     setEditingMember(null); setFirstName(''); setLastName(''); setTel(''); setEmail('');
@@ -310,7 +318,10 @@ const AdminPage: React.FC = () => {
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-4">
             <h1 className="text-4xl font-bold text-[var(--text-color)]">Admin <span className="text-orange-500 text-glow">Dashboard</span></h1>
-            <button onClick={() => navigate('/')} className="bg-[var(--card-color)] text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-80 transition-colors">Back to Site</button>
+            <div className="flex items-center gap-4">
+              <button onClick={() => navigate('/')} className="bg-[var(--card-color)] text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-80 transition-colors">Back to Site</button>
+              <button onClick={handleLogout} className="bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors">Logout</button>
+            </div>
         </div>
         
         <div className="flex border-b border-[var(--border-color)] overflow-x-auto">

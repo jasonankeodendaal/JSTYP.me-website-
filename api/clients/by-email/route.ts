@@ -1,7 +1,5 @@
 import { sql } from '@vercel/postgres';
 
-export const dynamic = 'force-dynamic';
-
 // GET client by Email
 export async function POST(request: Request) {
   try {

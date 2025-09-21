@@ -1,8 +1,6 @@
 import { sql } from '@vercel/postgres';
 import type { AppShowcaseItem } from '../../../../types';
 
-export const dynamic = 'force-dynamic';
-
 // ADD a rating to an app
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   try {

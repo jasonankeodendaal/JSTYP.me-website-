@@ -1,8 +1,6 @@
 import { sql } from '@vercel/postgres';
 import type { AppShowcaseItem } from '../../../types';
 
-export const dynamic = 'force-dynamic';
-
 // GET a single app by ID
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {

@@ -1,8 +1,6 @@
 import { sql } from '@vercel/postgres';
 import type { RedownloadRequest } from '../../types';
 
-export const dynamic = 'force-dynamic';
-
 // GET all redownload requests
 export async function GET() {
   try {

@@ -1,8 +1,6 @@
 import { sql } from '@vercel/postgres';
 import type { PinRecord } from '../../../types';
 
-export const dynamic = 'force-dynamic';
-
 // Redeem a PIN
 export async function POST(request: Request) {
   try {

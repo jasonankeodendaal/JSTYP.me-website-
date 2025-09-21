@@ -1,7 +1,5 @@
 import { sql } from '@vercel/postgres';
 
-export const dynamic = 'force-dynamic';
-
 // GET client by ID
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {

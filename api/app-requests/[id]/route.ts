@@ -1,7 +1,5 @@
 import { sql } from '@vercel/postgres';
 
-export const dynamic = 'force-dynamic';
-
 // Update app request status
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {

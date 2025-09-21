@@ -1,8 +1,6 @@
 import { sql } from '@vercel/postgres';
 import type { TeamMember } from '../../../types';
 
-export const dynamic = 'force-dynamic';
-
 // UPDATE a team member
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {

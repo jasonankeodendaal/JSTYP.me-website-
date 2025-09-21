@@ -1,8 +1,6 @@
 import { sql } from '@vercel/postgres';
 import type { WebsiteDetails } from '../../types';
 
-export const dynamic = 'force-dynamic';
-
 // GET website details
 export async function GET() {
   try {

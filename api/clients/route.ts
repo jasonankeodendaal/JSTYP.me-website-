@@ -1,8 +1,6 @@
 import { sql } from '@vercel/postgres';
 import type { Client } from '../../types';
 
-export const dynamic = 'force-dynamic';
-
 // GET all clients
 export async function GET() {
   try {

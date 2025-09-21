@@ -1,7 +1,5 @@
 import { sql } from '@vercel/postgres';
 
-export const dynamic = 'force-dynamic';
-
 // UPDATE a redownload request
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
