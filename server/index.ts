@@ -45,7 +45,7 @@ const feBuildPath = path.resolve(__dirname, '..', '..', 'dist');
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(feBuildPath));
 
-  app.get('*', (req, res) => {
+  app.get('*', (_, res) => {
     res.sendFile(path.join(feBuildPath, 'index.html'));
   });
 }

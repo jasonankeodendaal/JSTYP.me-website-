@@ -83,7 +83,7 @@ export async function PATCH(request: Request) { // Add/Update rating
 
         const app = rows[0];
         const currentRatings = Array.isArray(app.ratings) ? app.ratings : [];
-        const existingRatingIndex = currentRatings.findIndex(r => r.clientId === clientId);
+        const existingRatingIndex = currentRatings.findIndex((r: { clientId: string }) => r.clientId === clientId);
 
         if (existingRatingIndex > -1) {
             currentRatings[existingRatingIndex].rating = rating;
