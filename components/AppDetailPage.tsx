@@ -1,16 +1,13 @@
-
-
 import React, { useState, useMemo } from 'react';
-// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useApps } from '../hooks/useApps';
 import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
 import { useAuth } from '../contexts/AuthContext';
 import { usePinRecords } from '../hooks/usePinRecords';
 import LoadingSpinner from './LoadingSpinner';
 import DownloadModal from './DownloadModal';
-import Header from './Header';
 import Footer from './Footer';
+import Header from './Header';
 import ScreenshotCarousel from './ScreenshotCarousel';
 import TermsModal from './TermsModal';
 import StarRating from './StarRating';
@@ -81,9 +78,9 @@ const AppDetailPage: React.FC = () => {
 
 
     return (
-        <div className="bg-[var(--background-color)] text-[var(--text-color)] min-h-screen">
+        <div className="bg-[var(--background-color)] text-[var(--text-color)] min-h-screen flex flex-col">
             <Header sticky />
-            <main>
+            <main className="flex-grow">
                 <section className="relative h-[50vh] min-h-[300px] max-h-[500px]">
                     <img src={app.heroImageUrl} alt={`${app.name} hero`} className="absolute inset-0 w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/60"></div>
@@ -210,9 +207,9 @@ const AppDetailPage: React.FC = () => {
                     </div>
                 </section>
             </main>
+            <Footer />
             <DownloadModal isOpen={isDownloadModalOpen} onClose={() => setIsDownloadModalOpen(false)} app={app} />
             <TermsModal isOpen={isTermsModalOpen} onClose={() => setIsTermsModalOpen(false)} terms={app.termsAndConditions} appName={app.name} />
-            <Footer />
         </div>
     );
 };

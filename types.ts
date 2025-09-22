@@ -119,3 +119,11 @@ export interface AuthContextType {
   logout: () => void;
   loading: boolean;
 }
+
+export interface Video {
+  id: string;
+  prompt: string;
+  status: 'processing' | 'completed' | 'failed';
+  videoUrl?: string;
+  createdAt: string;
+}

@@ -97,7 +97,8 @@ const AppForm: React.FC<AppFormProps> = ({ editingApp, onCancelEdit, addApp, upd
     const handleMultipleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files && files.length > 0) {
-            const fileReadPromises = Array.from(files).map(file => {
+            // FIX: Explicitly type `file` as `File` to fix typescript inference issue.
+            const fileReadPromises = Array.from(files).map((file: File) => {
                 return new Promise<string>((resolve, reject) => {
                     const reader = new FileReader();
                     reader.onloadend = () => {

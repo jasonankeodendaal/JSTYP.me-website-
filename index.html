@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <style>
+        html, body, #root {
+            height: 100%;
+        }
         html {
             scroll-behavior: smooth;
         }
@@ -66,6 +69,54 @@
         .animate-futuristic-glow {
           animation: futuristic-glow 4s ease-in-out infinite;
         }
+
+        /* NEW ANIMATIONS FOR TEXT CAROUSEL */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--glow-color); }
+        }
+        .animate-typing {
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: .15em solid var(--glow-color);
+            margin: 0 auto;
+            display: inline-block;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-flash {
+            animation: flash 1.5s ease-in-out infinite;
+        }
+
+        @keyframes fade-in-out {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        .animate-fade {
+            animation: fade-in-out 4s ease-in-out infinite;
+        }
+
+        /* NEW ANIMATION FOR DIVIDER */
+        @keyframes equalizer {
+            0%, 100% { height: 4px; }
+            50% { height: 20px; }
+        }
+        .equalizer-bar {
+            display: inline-block;
+            width: 4px;
+            margin: 0 2px;
+            background-color: var(--glow-color);
+            animation: equalizer 1.5s ease-in-out infinite;
+            box-shadow: 0 0 2px var(--glow-color), 0 0 4px var(--glow-color);
+        }
     </style>
 <script type="importmap">
 {
@@ -74,19 +125,17 @@
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
     "react/": "https://aistudiocdn.com/react@^19.1.1/",
     "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.1",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
-    "buffer": "https://aistudiocdn.com/buffer@^6.0.3",
+    "vite": "https://aistudiocdn.com/vite@^7.1.7",
     "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.3",
-    "vite": "https://aistudiocdn.com/vite@^7.1.6",
-    "@vercel/postgres": "https://aistudiocdn.com/@vercel/postgres@^0.10.0",
-    "@vercel/blob": "https://aistudiocdn.com/@vercel/blob@^2.0.0",
+    "pg": "https://aistudiocdn.com/pg@^8.16.3",
     "dotenv/": "https://aistudiocdn.com/dotenv@^17.2.2/",
     "express": "https://aistudiocdn.com/express@^5.1.0",
     "cors": "https://aistudiocdn.com/cors@^2.8.5",
-    "pg": "https://aistudiocdn.com/pg@^8.16.3",
     "path": "https://aistudiocdn.com/path@^0.12.7",
     "url": "https://aistudiocdn.com/url@^0.11.4",
-    "@aws-sdk/client-s3": "https://aistudiocdn.com/@aws-sdk/client-s3@^3.893.0"
+    "fs/": "https://aistudiocdn.com/fs@^0.0.1-security/",
+    "buffer": "https://aistudiocdn.com/buffer@^6.0.3",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0"
   }
 }
 </script>

@@ -1,4 +1,6 @@
 
+
+import React from 'react';
 import type { AppShowcaseItem } from '../types';
 
 interface AppCardProps {

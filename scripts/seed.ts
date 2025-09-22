@@ -50,7 +50,7 @@ const MOCK_DETAILS: WebsiteDetails = {
     bankDetails: 'Bank: Future Bank\nAccount: 123456789\nBranch Code: 987654', 
     themeColor: '#f97316',
     introLogoUrl: '',
-    introImageUrl: 'https://picsum.photos/1920/1080?grayscale&blur=2',
+    introImageUrl: 'https://picsum.photos/1920/1000?grayscale&blur=2',
     fontFamily: "'Inter', sans-serif",
     backgroundColor: '#000000',
     textColor: '#ffffff',
@@ -69,141 +69,156 @@ const MOCK_CLIENTS: Client[] = [
     { id: 'client-2', name: 'Jane Smith', email: 'jane@example.com', password: 'password123' }
 ];
 
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-});
-
 async function main() {
-  console.log('Creating tables...');
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS apps (
-      id TEXT PRIMARY KEY,
-      name TEXT NOT NULL,
-      description TEXT,
-      imageUrl TEXT,
-      heroImageUrl TEXT,
-      longDescription TEXT,
-      price TEXT,
-      screenshots JSONB,
-      features JSONB,
-      abilities JSONB,
-      whyItWorks TEXT,
-      dedicatedPurpose TEXT,
-      termsAndConditions TEXT,
-      ratings JSONB,
-      pinCode TEXT,
-      apkUrl TEXT,
-      iosUrl TEXT,
-      pwaUrl TEXT
-    );`);
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const client = await pool.connect();
 
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS app_requests (
-      id TEXT PRIMARY KEY,
-      problemDescription TEXT NOT NULL,
-      status TEXT NOT NULL,
-      submittedAt TIMESTAMPTZ NOT NULL
-    );`);
+  try {
+    console.log('Creating tables...');
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS apps (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        description TEXT,
+        imageUrl TEXT,
+        heroImageUrl TEXT,
+        longDescription TEXT,
+        price TEXT,
+        screenshots JSONB,
+        features JSONB,
+        abilities JSONB,
+        whyItWorks TEXT,
+        dedicatedPurpose TEXT,
+        termsAndConditions TEXT,
+        ratings JSONB,
+        pinCode TEXT,
+        apkUrl TEXT,
+        iosUrl TEXT,
+        pwaUrl TEXT
+      );`);
 
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS website_details (
-      id INT PRIMARY KEY,
-      details JSONB NOT NULL
-    );`);
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS app_requests (
+        id TEXT PRIMARY KEY,
+        problemDescription TEXT NOT NULL,
+        status TEXT NOT NULL,
+        submittedAt TIMESTAMPTZ NOT NULL
+      );`);
 
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS pin_records (
-      id TEXT PRIMARY KEY,
-      pin TEXT UNIQUE NOT NULL,
-      appId TEXT NOT NULL,
-      appName TEXT NOT NULL,
-      clientDetails JSONB,
-      clientId TEXT,
-      clientName TEXT,
-      isRedeemed BOOLEAN NOT NULL,
-      generatedAt TIMESTAMPTZ NOT NULL,
-      redeemedAt TIMESTAMPTZ
-    );`);
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS website_details (
+        id INT PRIMARY KEY,
+        details JSONB NOT NULL
+      );`);
 
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS team_members (
-      id TEXT PRIMARY KEY,
-      firstName TEXT NOT NULL,
-      lastName TEXT NOT NULL,
-      tel TEXT,
-      email TEXT UNIQUE NOT NULL,
-      pin TEXT UNIQUE NOT NULL,
-      role TEXT,
-      profileImageUrl TEXT
-    );`);
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS pin_records (
+        id TEXT PRIMARY KEY,
+        pin TEXT UNIQUE NOT NULL,
+        appId TEXT NOT NULL,
+        appName TEXT NOT NULL,
+        clientDetails JSONB,
+        clientId TEXT,
+        clientName TEXT,
+        isRedeemed BOOLEAN NOT NULL,
+        generatedAt TIMESTAMPTZ NOT NULL,
+        redeemedAt TIMESTAMPTZ
+      );`);
 
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS clients (
-      id TEXT PRIMARY KEY,
-      name TEXT NOT NULL,
-      email TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL
-    );`);
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS team_members (
+        id TEXT PRIMARY KEY,
+        firstName TEXT NOT NULL,
+        lastName TEXT NOT NULL,
+        tel TEXT,
+        email TEXT UNIQUE NOT NULL,
+        pin TEXT UNIQUE NOT NULL,
+        role TEXT,
+        profileImageUrl TEXT
+      );`);
 
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS redownload_requests (
-      id TEXT PRIMARY KEY,
-      clientId TEXT NOT NULL,
-      clientName TEXT NOT NULL,
-      appId TEXT NOT NULL,
-      appName TEXT NOT NULL,
-      status TEXT NOT NULL,
-      requestedAt TIMESTAMPTZ NOT NULL,
-      resolutionNotes TEXT
-    );`);
-  console.log('Tables created successfully.');
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS clients (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+      );`);
+
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS redownload_requests (
+        id TEXT PRIMARY KEY,
+        clientId TEXT NOT NULL,
+        clientName TEXT NOT NULL,
+        appId TEXT NOT NULL,
+        appName TEXT NOT NULL,
+        status TEXT NOT NULL,
+        requestedAt TIMESTAMPTZ NOT NULL,
+        resolutionNotes TEXT
+      );`);
+
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS videos (
+          id TEXT PRIMARY KEY,
+          prompt TEXT NOT NULL,
+          status TEXT NOT NULL,
+          "videoUrl" TEXT,
+          "createdAt" TIMESTAMPTZ NOT NULL
+      );`);
+    console.log('Tables created successfully.');
 
 
-  console.log('Seeding data...');
-  
-  // Seed apps
-  for (const app of MOCK_APPS) {
-    await pool.query(`
-      INSERT INTO apps (id, name, description, imageUrl, heroImageUrl, longDescription, price, screenshots, features, abilities, whyItWorks, dedicatedPurpose, termsAndConditions, ratings, pinCode, apkUrl, iosUrl, pwaUrl)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
-      ON CONFLICT (id) DO NOTHING;
-    `, [app.id, app.name, app.description, app.imageUrl, app.heroImageUrl, app.longDescription, app.price, JSON.stringify(app.screenshots), JSON.stringify(app.features), JSON.stringify(app.abilities), app.whyItWorks, app.dedicatedPurpose, app.termsAndConditions, JSON.stringify(app.ratings), app.pinCode, app.apkUrl, app.iosUrl, app.pwaUrl]);
+    console.log('Seeding data...');
+    
+    // Seed apps
+    for (const app of MOCK_APPS) {
+      await client.query(
+        `INSERT INTO apps (id, name, description, imageUrl, heroImageUrl, longDescription, price, screenshots, features, abilities, whyItWorks, dedicatedPurpose, termsAndConditions, ratings, pinCode, apkUrl, iosUrl, pwaUrl)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+         ON CONFLICT (id) DO NOTHING;`,
+        [app.id, app.name, app.description, app.imageUrl, app.heroImageUrl, app.longDescription, app.price, JSON.stringify(app.screenshots), JSON.stringify(app.features), JSON.stringify(app.abilities), app.whyItWorks, app.dedicatedPurpose, app.termsAndConditions, JSON.stringify(app.ratings), app.pinCode, app.apkUrl, app.iosUrl, app.pwaUrl]
+      );
+    }
+    console.log('Seeded apps.');
+
+    // Seed website_details (using a single row with id=1)
+    await client.query(
+        `INSERT INTO website_details (id, details)
+         VALUES (1, $1)
+         ON CONFLICT (id) DO UPDATE SET details = $1;`,
+        [JSON.stringify(MOCK_DETAILS)]
+    );
+    console.log('Seeded website details.');
+
+    // Seed team members
+    for (const member of MOCK_TEAM) {
+      await client.query(
+        `INSERT INTO team_members (id, firstName, lastName, tel, email, pin, role, profileImageUrl)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+         ON CONFLICT (id) DO NOTHING;`,
+        [member.id, member.firstName, member.lastName, member.tel, member.email, member.pin, member.role, member.profileImageUrl]
+      );
+    }
+    console.log('Seeded team members.');
+
+    // Seed clients
+    for (const c of MOCK_CLIENTS) {
+      await client.query(
+        `INSERT INTO clients (id, name, email, password)
+         VALUES ($1, $2, $3, $4)
+         ON CONFLICT (id) DO NOTHING;`,
+         [c.id, c.name, c.email, c.password]
+      );
+    }
+    console.log('Seeded clients.');
+    
+    console.log('Database seeding complete!');
+  } finally {
+    await client.release();
+    await pool.end();
   }
-  console.log('Seeded apps.');
-
-  // Seed website_details (using a single row with id=1)
-  await pool.query(`
-    INSERT INTO website_details (id, details)
-    VALUES (1, $1)
-    ON CONFLICT (id) DO UPDATE SET details = $1;
-  `, [JSON.stringify(MOCK_DETAILS)]);
-  console.log('Seeded website details.');
-
-  // Seed team members
-  for (const member of MOCK_TEAM) {
-    await pool.query(`
-      INSERT INTO team_members (id, firstName, lastName, tel, email, pin, role, profileImageUrl)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      ON CONFLICT (id) DO NOTHING;
-    `, [member.id, member.firstName, member.lastName, member.tel, member.email, member.pin, member.role, member.profileImageUrl]);
-  }
-  console.log('Seeded team members.');
-
-  // Seed clients
-  for (const c of MOCK_CLIENTS) {
-    await pool.query(`
-      INSERT INTO clients (id, name, email, password)
-      VALUES ($1, $2, $3, $4)
-      ON CONFLICT (id) DO NOTHING;
-    `, [c.id, c.name, c.email, c.password]);
-  }
-  console.log('Seeded clients.');
-  
-  console.log('Database seeding complete!');
-  await pool.end();
 }
 
 main().catch(err => {
   console.error('An error occurred while seeding the database:', err);
-  pool.end();
 });

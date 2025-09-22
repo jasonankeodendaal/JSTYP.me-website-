@@ -1,0 +1,32 @@
+databases:
+  - name: jstyp-db
+    databaseName: jstyp_db
+    user: jstyp_user
+    plan: free
+
+services:
+  - type: web
+    name: jstyp-app
+    env: node
+    plan: free
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jstyp-db
+          property: connectionString
+      - key: API_KEY
+        description: "Your Google Gemini API Key"
+        sync: false
+      - key: BACKEND_URL
+        description: "The public URL of this service, used for creating links to uploaded files"
+        fromService:
+          type: web
+          name: jstyp-app
+          property: url
+    disks:
+      - name: uploads
+        mountPath: /var/data/uploads
+        sizeGB: 1

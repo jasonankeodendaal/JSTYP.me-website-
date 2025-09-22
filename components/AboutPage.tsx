@@ -1,12 +1,9 @@
-
-
 import React from 'react';
 import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
 import Header from './Header';
 import Footer from './Footer';
 import LoadingSpinner from './LoadingSpinner';
 import type { AboutPageSection } from '../types';
-// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
 import { Link } from "react-router-dom";
 import { ArrowLeftIcon } from './IconComponents';
 
@@ -38,9 +35,9 @@ const AboutPage: React.FC = () => {
     );
 
     return (
-        <div className="bg-[var(--background-color)] text-[var(--text-color)] min-h-screen">
+        <div className="bg-[var(--background-color)] text-[var(--text-color)] min-h-screen flex flex-col">
             <Header sticky />
-            <main className="container mx-auto py-24 px-4">
+            <main className="container mx-auto py-24 px-4 flex-grow">
                 <Link 
                     to="/" 
                     className="mb-12 inline-flex items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors font-semibold"

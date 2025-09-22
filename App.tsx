@@ -1,7 +1,5 @@
-
-
+import React from 'react';
 import { useState, useEffect } from 'react';
-// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import HomePage from './components/HomePage';
 import AdminPage from './components/AdminPage';

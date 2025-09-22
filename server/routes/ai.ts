@@ -1,31 +1,28 @@
-// FIX: Imported Request and Response types from express to resolve namespace errors.
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { GoogleGenAI, Type } from "@google/genai";
 import type { AppShowcaseItem } from '../../types';
 
 const router = Router();
 
-// FIX: Replaced express.Request and express.Response with imported Request and Response types.
-async function handler(req: Request, res: Response) {
+router.post('/', async (req, res) => {
     try {
         if (!process.env.API_KEY) {
             throw new Error("API_KEY environment variable not set");
         }
         
-        const body = req.body;
-        const { task } = body;
+        const { task } = req.body;
 
         switch (task) {
             case 'generate-description':
-                return await generateDescription(body, res);
+                return await generateDescription(req, res);
             case 'generate-listing':
-                return await generateListing(body, res);
+                return await generateListing(req, res);
             case 'generate-image':
-                return await generateImage(body, res);
+                return await generateImage(req, res);
             case 'find-matching-app':
-                return await findMatchingApp(body, res);
+                return await findMatchingApp(req, res);
             case 'generate-about-page':
-                return await generateAboutPage(body, res);
+                return await generateAboutPage(req, res);
             default:
                 return res.status(400).json({ message: "Invalid AI task specified" });
         }
@@ -33,17 +30,12 @@ async function handler(req: Request, res: Response) {
         console.error(`Error in AI task:`, error);
         return res.status(500).json({ message: (error as Error).message });
     }
-}
-
-router.post('/', handler);
-
-export default router;
+});
 
 // --- Reusable AI Handlers ---
 
-// FIX: Replaced express.Response with imported Response type.
-async function generateDescription(body: { keywords: string }, res: Response) {
-    const { keywords } = body;
+async function generateDescription(req: any, res: any) {
+    const { keywords } = req.body;
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
     const prompt = `Generate a compelling, short, and exciting app store description for an app with the following features or keywords: "${keywords}". The description should be no more than 3 sentences and must encourage users to download.`;
     const response = await ai.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
@@ -51,9 +43,8 @@ async function generateDescription(body: { keywords: string }, res: Response) {
     return res.status(200).json({ description });
 }
 
-// FIX: Replaced express.Response with imported Response type.
-async function generateListing(body: { idea: string }, res: Response) {
-    const { idea } = body;
+async function generateListing(req: any, res: any) {
+    const { idea } = req.body;
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
     const prompt = `Based on the following app idea, generate a complete and compelling app listing.
 Idea: "${idea}"
@@ -85,9 +76,8 @@ Features and abilities should be concise bullet points.`;
     return res.status(200).json(listing);
 }
 
-// FIX: Replaced express.Response with imported Response type.
-async function generateImage(body: { prompt: string, aspectRatio: '1:1' | '16:9' }, res: Response) {
-    const { prompt, aspectRatio } = body;
+async function generateImage(req: any, res: any) {
+    const { prompt, aspectRatio } = req.body;
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
     const response = await ai.models.generateImages({
         model: 'imagen-4.0-generate-001',
@@ -106,11 +96,10 @@ async function generateImage(body: { prompt: string, aspectRatio: '1:1' | '16:9'
     return res.status(200).json({ imageUrl });
 }
 
-// FIX: Replaced express.Response with imported Response type.
-async function findMatchingApp(body: { problem: string, apps: AppShowcaseItem[] }, res: Response) {
-    const { problem, apps } = body;
+async function findMatchingApp(req: any, res: any) {
+    const { problem, apps } = req.body;
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
-    const simplifiedApps = apps.map(({ id, name, description, longDescription }) => ({ id, name, fullDescription: `${description} ${longDescription}` }));
+    const simplifiedApps = apps.map(({ id, name, description, longDescription }: AppShowcaseItem) => ({ id, name, fullDescription: `${description} ${longDescription}` }));
     const prompt = `You are an AI App Advisor for a website called JSTYP.me. A user described a problem: "${problem}".
 Analyze the problem and determine which of the following apps is the best solution. The available apps are:
 ${JSON.stringify(simplifiedApps, null, 2)}
@@ -143,9 +132,8 @@ Only recommend an app if it's a strong, direct solution to the user's problem. I
     return res.status(200).json({ bestMatchAppId: jsonResponse.bestMatchAppId, reasoning: jsonResponse.reasoning });
 }
 
-// FIX: Replaced express.Response with imported Response type.
-async function generateAboutPage(body: { rawText: string }, res: Response) {
-    const { rawText } = body;
+async function generateAboutPage(req: any, res: any) {
+    const { rawText } = req.body;
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
     const sectionSchema = {
       type: Type.OBJECT,
@@ -178,3 +166,5 @@ async function generateAboutPage(body: { rawText: string }, res: Response) {
     const content = JSON.parse(response.text || '{}');
     return res.status(200).json(content);
 }
+
+export default router;

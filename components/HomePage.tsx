@@ -1,11 +1,12 @@
-
-
-// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
+import React from 'react';
 import { Link } from "react-router-dom";
 import { useApps } from '../hooks/useApps';
+import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
 import { useAuth } from '../contexts/AuthContext';
 import { useTeamMembers } from '../hooks/useTeamMembers';
+import { useVideos } from '../hooks/useVideos';
 import AppCard from './AppCard';
+import VideoCard from './VideoCard';
 import LoadingSpinner from './LoadingSpinner';
 import AIAppAdvisor from './AIAppAdvisor';
 import Header from './Header'; // Import the new shared Header
@@ -114,12 +115,41 @@ const AppShowcase: React.FC = () => {
     );
 };
 
+const VideoShowcase: React.FC = () => {
+    const { videos, loading } = useVideos();
+
+    return (
+        <section id="videos" className="py-20 px-4 md:px-8 bg-[var(--background-color)] relative">
+            <div className="container mx-auto">
+                <h2 className="text-4xl font-bold text-center mb-12">
+                    AI Generated <span className="text-orange-500 text-glow">Videos</span>
+                </h2>
+                {loading ? (
+                    <div className="flex justify-center">
+                        <LoadingSpinner size={12} />
+                    </div>
+                ) : !videos || videos.length === 0 ? (
+                    <div className="text-center text-gray-500 py-10">
+                        <p>No videos have been generated yet. Check back soon!</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {videos.map(video => (
+                           <VideoCard key={video.id} video={video} />
+                        ))}
+                    </div>
+                )}
+            </div>
+        </section>
+    );
+};
+
 
 const HomePage: React.FC = () => {
     return (
-        <div className="bg-[var(--background-color)]">
+        <div className="bg-[var(--background-color)] min-h-screen flex flex-col">
             <Header />
-            <main>
+            <main className="flex-grow">
                 <Hero />
 
                 <div className="py-8">
@@ -137,6 +167,13 @@ const HomePage: React.FC = () => {
                 </div>
                 
                 <AppShowcase />
+
+                <div className="py-8">
+                    <ScrollingTextCarousel />
+                </div>
+                
+                <VideoShowcase />
+
             </main>
             <Footer />
         </div>

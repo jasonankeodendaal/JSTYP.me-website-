@@ -1,7 +1,5 @@
-
-
+import React from 'react';
 import { useState, useEffect } from 'react';
-// FIX: Changed single quotes to double quotes for the import path to potentially resolve module resolution issues.
 import { useNavigate } from "react-router-dom";
 import { useApps } from '../hooks/useApps';
 import { useAppRequests } from '../hooks/useAppRequests';
@@ -9,14 +7,15 @@ import { useWebsiteDetails } from '../hooks/useWebsiteDetails';
 import { usePinRecords } from '../hooks/usePinRecords';
 import { useTeamMembers } from '../hooks/useTeamMembers';
 import { useRedownloadRequests } from '../hooks/useRedownloadRequests'; // New hook
+import { useVideos } from '../hooks/useVideos';
 import { generateAboutPageContent, generateAppImage } from '../services/geminiService';
 import LoadingSpinner from './LoadingSpinner';
-import { ClockIcon, CheckCircleIcon, KeyIcon, PhoneIcon, EnvelopeIcon, MapPinIcon, BanknotesIcon, LoginIcon, UsersIcon, PencilIcon, TrashIcon, SparklesIcon } from './IconComponents';
+import { ClockIcon, CheckCircleIcon, KeyIcon, PhoneIcon, EnvelopeIcon, MapPinIcon, BanknotesIcon, LoginIcon, UsersIcon, PencilIcon, TrashIcon, SparklesIcon, FilmIcon } from './IconComponents';
 import type { AppShowcaseItem, TeamMember } from '../types';
 import AppForm from './admin/AppForm';
 import AppList from './admin/AppList';
 
-type AdminTab = 'apps' | 'pins' | 'userRequests' | 'redownloadRequests' | 'settings' | 'team' | 'about';
+type AdminTab = 'apps' | 'pins' | 'userRequests' | 'redownloadRequests' | 'videos' | 'settings' | 'team' | 'about';
 
 const AdminPage: React.FC = () => {
   const navigate = useNavigate();
@@ -26,7 +25,8 @@ const AdminPage: React.FC = () => {
   const { records: pinRecords, generatePin, loading: pinsLoading } = usePinRecords();
   const { teamMembers, addTeamMember, updateTeamMember, deleteTeamMember, loading: teamLoading } = useTeamMembers();
   const { requests: redownloadRequests, updateRequest, loading: redownloadLoading } = useRedownloadRequests();
-  
+  const { videos, addVideo, generating: isGeneratingVideo, loading: videosLoading } = useVideos();
+
   const [authState, setAuthState] = useState<'pending' | 'unauthenticated' | 'authenticated'>('pending');
   const [userRole, setUserRole] = useState<'master' | 'team' | null>(null);
   const [usernameInput, setUsernameInput] = useState('');
@@ -59,6 +59,9 @@ const AdminPage: React.FC = () => {
   const [aboutRawText, setAboutRawText] = useState('');
   const [isGeneratingAbout, setIsGeneratingAbout] = useState(false);
   const [generatingImageState, setGeneratingImageState] = useState<{ [key: string]: boolean }>({});
+
+  // Video Generation State
+  const [videoPrompt, setVideoPrompt] = useState('');
 
 
   useEffect(() => {
@@ -268,6 +271,16 @@ const AdminPage: React.FC = () => {
     }
   };
 
+  const handleVideoGenerate = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!videoPrompt.trim()) {
+        alert('Please enter a prompt for the video.');
+        return;
+    }
+    addVideo(videoPrompt);
+    setVideoPrompt('');
+  };
+
   if (authState === 'pending' || detailsLoading || teamLoading) {
     return <div className="min-h-screen bg-black flex items-center justify-center"><LoadingSpinner size={12}/></div>;
   }
@@ -330,6 +343,7 @@ const AdminPage: React.FC = () => {
             <TabButton tab="pins" label="PIN Management" />
             <TabButton tab="userRequests" label="User Ideas" />
             <TabButton tab="redownloadRequests" label="Client Requests" />
+            <TabButton tab="videos" label="Video Generation" />
             {userRole === 'master' && <TabButton tab="settings" label="Website Settings" />}
             {userRole === 'master' && <TabButton tab="about" label="About Page" />}
             {userRole === 'master' && <TabButton tab="team" label="Team Management" />}
@@ -440,6 +454,52 @@ const AdminPage: React.FC = () => {
                       ) : ( <p className="text-gray-400">No re-download requests yet.</p> )}
                     </div>
                   )}
+                </div>
+            )}
+
+            {activeTab === 'videos' && (
+                <div>
+                    <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+                        <FilmIcon className="w-8 h-8 text-orange-500" />
+                        Generate New Video with AI
+                    </h2>
+                    <form onSubmit={handleVideoGenerate} className="space-y-4 mb-8">
+                        <textarea
+                            placeholder="e.g., A cinematic shot of a futuristic city at night, with flying cars and neon lights."
+                            value={videoPrompt}
+                            onChange={e => setVideoPrompt(e.target.value)}
+                            rows={3}
+                            className="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                            required
+                        />
+                        <button type="submit" disabled={!!isGeneratingVideo} className="w-full bg-orange-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-orange-600 transition-colors disabled:bg-gray-500 flex justify-center items-center gap-2">
+                            {isGeneratingVideo ? <><LoadingSpinner size={6} /> Generating (This may take a few minutes)...</> : 'Generate Video'}
+                        </button>
+                        {isGeneratingVideo && <p className="text-center text-yellow-400 text-sm mt-2">Please do not navigate away from this page while a video is processing.</p>}
+                    </form>
+
+                    <h3 className="text-xl font-bold mt-8 mb-4 text-white">Generated Videos</h3>
+                    {videosLoading ? <LoadingSpinner /> : (
+                        <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                            {videos?.map(video => (
+                                <div key={video.id} className="bg-gray-700 p-4 rounded-lg flex gap-4 items-center">
+                                    {video.status === 'completed' && video.videoUrl ? (
+                                        <video src={video.videoUrl} className="w-28 h-28 object-cover rounded bg-black" controls muted loop />
+                                    ) : (
+                                        <div className="w-28 h-28 bg-black rounded flex items-center justify-center text-center">
+                                            {video.status === 'processing' ? <LoadingSpinner /> : <span className="text-red-500 font-bold">Failed</span>}
+                                        </div>
+                                    )}
+                                    <div className="flex-grow">
+                                        <p className="font-semibold text-gray-300">{video.prompt}</p>
+                                        <p className={`text-sm font-bold mt-2 ${video.status === 'completed' ? 'text-green-400' : video.status === 'processing' ? 'text-yellow-400' : 'text-red-500'}`}>
+                                            Status: {video.status.toUpperCase()}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
             

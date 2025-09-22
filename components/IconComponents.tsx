@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 export const DownloadIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -117,5 +119,11 @@ export const ArrowLeftIcon: React.FC<{ className?: string }> = ({ className }) =
 export const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor">
         <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.31 20.62C8.75 21.41 10.36 21.82 12.04 21.82C17.5 21.82 21.95 17.37 21.95 11.91C21.95 6.45 17.5 2 12.04 2M12.04 20.13C10.56 20.13 9.12 19.68 7.89 18.85L7.55 18.64L4.44 19.5L5.36 16.48L5.14 16.13C4.24 14.8 3.82 13.25 3.82 11.91C3.82 7.39 7.52 3.69 12.04 3.69C16.56 3.69 20.26 7.39 20.26 11.91C20.26 16.43 16.56 20.13 12.04 20.13M17.36 14.44C17.11 14.32 15.89 13.75 15.68 13.67C15.47 13.59 15.32 13.55 15.18 13.79C15.04 14.04 14.57 14.61 14.42 14.78C14.28 14.96 14.14 14.97 13.89 14.85C13.64 14.73 12.68 14.4 11.53 13.4C10.63 12.63 10.03 11.73 9.89 11.48C9.75 11.23 9.86 11.12 9.98 11C10.09 10.88 10.24 10.7 10.39 10.54C10.51 10.42 10.55 10.33 10.64 10.15C10.73 9.97 10.68 9.82 10.61 9.7C10.53 9.58 10.02 8.36 9.82 7.85C9.62 7.34 9.42 7.42 9.28 7.41C9.14 7.41 8.99 7.41 8.85 7.41C8.71 7.41 8.44 7.49 8.24 7.89C8.03 8.29 7.47 8.82 7.47 9.94C7.47 11.06 8.28 12.12 8.4 12.29C8.52 12.46 10.02 14.82 12.45 15.77C13.06 16.02 13.54 16.18 13.91 16.31C14.52 16.52 15.01 16.49 15.41 16.42C15.86 16.33 16.92 15.74 17.12 15.17C17.32 14.6 17.32 14.1 17.24 14.02C17.17 13.93 17.24 14.56 17.36 14.44Z"></path>
+    </svg>
+);
+
+export const FilmIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5m-7.5-13.5h19.5m-19.5 3h19.5m-19.5 3h19.5m-19.5 3h19.5m-19.5 3h19.5" />
     </svg>
 );

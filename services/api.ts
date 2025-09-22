@@ -10,7 +10,8 @@ import type {
     PinRecord, 
     TeamMember, 
     Client, 
-    RedownloadRequest 
+    RedownloadRequest,
+    Video
 } from '../types';
 
 // --- Helper for API calls ---
@@ -34,7 +35,7 @@ const uploadImage = async (base64: string): Promise<string> => {
     if (!base64 || !base64.startsWith('data:image')) {
         return base64; // It's already a URL or empty
     }
-    const { url } = await apiFetch<{ url: string }>('/api/upload', {
+    const { url } = await apiFetch<{ url: string }>('/api/website-details', {
         method: 'POST',
         body: JSON.stringify({ file: base64 }),
     });
@@ -197,4 +198,18 @@ export const updateRedownloadRequest = (requestId: string, status: 'approved' | 
         method: 'PUT',
         body: JSON.stringify({ id: requestId, status, resolutionNotes }),
     });
+};
+
+// --- Video Generation API ---
+export const getVideos = (): Promise<Video[]> => apiFetch('/api/videos');
+
+export const generateVideo = (prompt: string): Promise<{ video: Video; operationName: string }> => {
+    return apiFetch('/api/videos/generate', {
+        method: 'POST',
+        body: JSON.stringify({ prompt }),
+    });
+};
+
+export const checkVideoStatus = (videoId: string, operationName: string): Promise<{ status: 'processing' | 'completed' | 'failed'; video?: Video }> => {
+    return apiFetch(`/api/videos/${videoId}/status?operationName=${operationName}`);
 };
