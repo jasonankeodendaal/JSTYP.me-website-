@@ -5,17 +5,7 @@ import 'dotenv/config';
 import { ensureUploadsDir } from './uploader';
 // FIX: Add import for __dirname polyfill
 import { fileURLToPath } from 'url';
-
-// Import routers
-import aiRouter from './routes/ai';
-import appsRouter from './routes/apps';
-import appRequestsRouter from './routes/app-requests';
-import clientsRouter from './routes/clients';
-import pinsRouter from './routes/pins';
-import redownloadRequestsRouter from './routes/redownload-requests';
-import teamMembersRouter from './routes/team-members';
-import websiteDetailsRouter from './routes/website-details';
-import videosRouter from './routes/videos';
+import apiRouter from './routes/api'; // Import the single, unified router
 
 // FIX: Polyfill __dirname for ES modules environment
 const __filename = fileURLToPath(import.meta.url);
@@ -32,15 +22,8 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' })); // Increase limit for base64 uploads
 
 // --- API Routes ---
-app.use('/api/ai', aiRouter);
-app.use('/api/apps', appsRouter);
-app.use('/api/app-requests', appRequestsRouter);
-app.use('/api/clients', clientsRouter);
-app.use('/api/pins', pinsRouter);
-app.use('/api/redownload-requests', redownloadRequestsRouter);
-app.use('/api/team-members', teamMembersRouter);
-app.use('/api/website-details', websiteDetailsRouter);
-app.use('/api/videos', videosRouter);
+// Use the single router for all API endpoints
+app.use('/api', apiRouter);
 
 // --- File Serving for Uploads ---
 // This path corresponds to the disk mount path in render.yaml
